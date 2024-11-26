@@ -8,15 +8,6 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    // <div className="bg-blue-900">
-    //   <div className="container mx-auto">
-    //     <Topbar />
-    //     <HeroSection />
-    //     <div className="bg-yellow-600">
-    //       <HotelSearch />
-    //     </div>
-    //   </div>
-    // </div>
     <div>
       <Navbar />
       <HeroSection />
