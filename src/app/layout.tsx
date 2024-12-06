@@ -1,9 +1,9 @@
 import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
-import { type Metadata } from "next";
+import type { Metadata } from "next";
 
-import { poppins } from "./ui/fonts";
+// import { poppins } from "./ui/fonts";
 
 export const metadata: Metadata = {
   title: "TravelNest",
