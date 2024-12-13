@@ -11,6 +11,7 @@ import { Button } from './ui/button';
 import { DatePickerWithRange } from './ui/DatePickerWithRange';
 import { PersonDropdownMenu } from './ui/PersonDropdownMenu';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { useRouter } from 'next/navigation';
 
 export type options = {
     adult: number;
@@ -24,6 +25,7 @@ function HeaderSearch() {
         children: 0,
         rooms: 1
     })
+
     const handleOptions = (name: keyof options, operation: "i" | "d") => {
         setOptions((prev) => {
             return {
@@ -31,6 +33,12 @@ function HeaderSearch() {
             }
         })
     }
+
+    const router = useRouter()
+    const handleSearch = () => {
+        router.push('/search-results')
+    };
+    
     return (
         <div className="headerSearch flex items-center justify-around max-w-screen-lg bg-white border-4 border-yellow-500 py-3 px-3 gap-3 rounded">
             <div className="headerSearchItem flex items-center gap-[10px]">
@@ -64,7 +72,7 @@ function HeaderSearch() {
                 <PersonDropdownMenu options={options} />
             </div> */}
             <div className="headerSearchItem flex items-center gap-3">
-                <Button>Search</Button>
+                <Button onClick={handleSearch}>Search</Button>
             </div>
         </div>
     )
