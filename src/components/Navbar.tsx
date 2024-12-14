@@ -6,7 +6,7 @@ function Navbar() {
     return (
         <div className='flex h-14 bg-blue-900 justify-center navbar'>
             <div className='flex w-full max-w-screen-lg justify-between text-white items-center navcontainer'>
-                <span className={`${poppins.className} antialiased font-extrabold text-2xl text-white p-2`}>TravelNest</span>
+                <span className={`${poppins.className} antialiased font-extrabold  text-3xl text-white p-2`}>TravelNest</span>
                 <div className='flex gap-5 navItems'>
                     <Button className="text-blue-900" variant={"outline"}>Register</Button>
                     <Button className="text-blue-900" variant={"outline"}>Login</Button>
