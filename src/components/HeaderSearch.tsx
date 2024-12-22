@@ -70,7 +70,7 @@ function HeaderSearch() {
         (query.children) ? params.set("children", query.children) : params.delete("children");
         (query.rooms) ? params.set("rooms", query.rooms) : params.delete("rooms");
 
-        replace(`${pathname}search-results?${params}`)
+        replace(`${pathname}hotels?${params}`)
     }
 
     return (
