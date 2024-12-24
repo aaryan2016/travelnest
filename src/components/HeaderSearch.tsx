@@ -79,7 +79,7 @@ function HeaderSearch() {
                 <input
                     type='text'
                     placeholder='Where are you going?'
-                    className='headerSearchInput border-none outline-none text-slate-300'
+                    className='headerSearchInput border-none outline-none '
                     onChange={(e) => { setDestination(e.target.value) }}
                 />
             </div>
