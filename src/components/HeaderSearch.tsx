@@ -14,7 +14,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dro
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { DateRange } from "react-day-picker"
 import { addDays } from "date-fns"
-import { PathParamsContext } from 'next/dist/shared/lib/hooks-client-context.shared-runtime';
 
 export type options = {
     adult: number;
