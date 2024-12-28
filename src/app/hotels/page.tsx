@@ -1,31 +1,26 @@
 import SearchItem from "@/components/SearchItem";
 import { db } from "../../server/db";
 import Navbar from "@/components/Navbar";
-import { Button } from "@/components/ui/button";
-import { DatePickerWithRange } from "@/components/ui/DatePickerWithRange";
-import { format } from "date-fns"
+import SearchItemFilter from "@/components/SearchItemFilter";
+
+export interface searchParams {
+    destination: string,
+    from: string,
+    to: string,
+    adult: string,
+    kids: string,
+    rooms: string,
+}
 
 export default async function Page({
     searchParams,
 }: {
-    searchParams?: {
-        destination: string,
-        from: string,
-        to: string,
-        adult: string,
-        children: string,
-        rooms: string,
-    }
+    searchParams?: searchParams
 }) {
 
     //@ts-ignore
-    const { destination, from, to, adult, children, rooms } = await searchParams
-    console.log("destination:", destination)
-    console.log("from:", from)
-    console.log("to:", to)
-    console.log("adult:", adult)
-    console.log("children:", children)
-    console.log("rooms:", rooms)
+    const { destination, from, to, adult, kids, rooms } = await searchParams
+
     // const properties = await fetchProperties({ destination })
     return (
         <div>
@@ -40,7 +35,7 @@ export default async function Page({
             {/* </div> */}
             <div className="listContainer flex justify-center mt-5">
                 <div className="listWrapper w-full max-w-screen-lg flex gap-5">
-                    <div className="listSearch flex-1 p-3 rounded-xl sticky h-max top-3 bg-[#febb02]">
+                    {/* <div className="listSearch flex-1 p-3 rounded-xl sticky h-max top-3 bg-[#febb02]">
                         <h1 className="lsTitle text-xl text-gray-700 font-bold mb-3">Search</h1>
                         <div className="listItem flex flex-col gap-1 mb-2">
                             <label
@@ -90,11 +85,11 @@ export default async function Page({
                                     </div>
                                     <div className="lsOptionItem flex justify-between mb-2 text-gray-700 text-sm">
                                         <span className="lsOptionText">
-                                            Children
+                                            kids
                                         </span>
                                         <input
                                             className="lsOptionInput w-16 text-center"
-                                            placeholder={children}
+                                            placeholder={kids}
                                             min={0}
                                             type="number" />
                                     </div>
@@ -114,7 +109,15 @@ export default async function Page({
                         <Button className="p-3 bg-blue-900 text-white w-full font-semibold">
                             Search
                         </Button>
-                    </div>
+                    </div> */}
+                    <SearchItemFilter
+                        destination={destination}
+                        from={from}
+                        to={to}
+                        adult={adult}
+                        kids={kids}
+                        rooms={rooms}
+                    />
                     <div className="listResult flex-[3_3_0%]">
                         <SearchItem />
                         <SearchItem />

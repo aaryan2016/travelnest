@@ -17,14 +17,14 @@ import { addDays } from "date-fns"
 
 export type options = {
     adult: number;
-    children: number;
+    kids: number;
     rooms: number;
 }
 
 function HeaderSearch() {
     const [options, setOptions] = useState<options>({
         adult: 2,
-        children: 0,
+        kids: 0,
         rooms: 1
     })
 
@@ -57,7 +57,7 @@ function HeaderSearch() {
             from: date?.from?.toISOString().slice(0, 10), // Convert date to string
             to: date?.to?.toISOString().slice(0, 10),     // Convert date to string
             adult: options.adult.toString(),
-            children: options.children.toString(),
+            kids: options.kids.toString(),
             rooms: options.rooms.toString(),
         };
 
@@ -66,7 +66,7 @@ function HeaderSearch() {
         (query.from) ? params.set("from", query.from) : params.delete("from");
         (query.to) ? params.set("to", query.to) : params.delete("to");
         (query.adult) ? params.set("adult", query.adult) : params.delete("adult");
-        (query.children) ? params.set("children", query.children) : params.delete("children");
+        (query.kids) ? params.set("kids", query.kids) : params.delete("kids");
         (query.rooms) ? params.set("rooms", query.rooms) : params.delete("rooms");
 
         replace(`${pathname}hotels?${params}`)
@@ -93,7 +93,7 @@ function HeaderSearch() {
                 <DropdownMenuTrigger asChild>
                     <div className='flex items-center gap-[10px] border-none outline-none'>
                         <FontAwesomeIcon icon={faPerson} className='headerIcon text-slate-300 h-5' />
-                        <span className='headerSearchText text-slate-300 cursor-pointer'>{`${options.adult} adults ${options.children} childern ${options.rooms} rooms`}</span>
+                        <span className='headerSearchText text-slate-300 cursor-pointer'>{`${options.adult} adults ${options.kids} childern ${options.rooms} rooms`}</span>
                         <DropdownMenuContent className="w-56">
                             <PersonDropdownMenu options={options} handleOptions={handleOptions} />
                         </DropdownMenuContent>
@@ -102,7 +102,7 @@ function HeaderSearch() {
             </DropdownMenu>
             {/* <div className="headerSearchItem flex items-center gap-[10px]">
                 <FontAwesomeIcon icon={faPerson} className='headerIcon text-slate-300 h-5' />
-                <span className='headerSearchText text-slate-300 cursor-pointer'>{`${options.adult} adults ${options.children} childern ${options.rooms} rooms`}</span>
+                <span className='headerSearchText text-slate-300 cursor-pointer'>{`${options.adult} adults ${options.kids} childern ${options.rooms} rooms`}</span>
                 <PersonDropdownMenu options={options} />
             </div> */}
             <div className="headerSearchItem flex items-center gap-3">
