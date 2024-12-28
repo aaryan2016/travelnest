@@ -1,3 +1,4 @@
+import SearchItem from "@/components/SearchItem";
 import { db } from "../../server/db";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -37,9 +38,9 @@ export default async function Page({
                     </p>
                 </div> */}
             {/* </div> */}
-            <div className="listContainer bg-red-400 flex justify-center mt-5">
+            <div className="listContainer flex justify-center mt-5">
                 <div className="listWrapper w-full max-w-screen-lg flex gap-5">
-                    <div className="listSearch flex-1 p-3 rounded-xl sticky top-3 bg-yellow-400">
+                    <div className="listSearch flex-1 p-3 rounded-xl sticky h-max top-3 bg-[#febb02]">
                         <h1 className="lsTitle text-xl text-gray-700 font-bold mb-3">Search</h1>
                         <div className="listItem flex flex-col gap-1 mb-2">
                             <label
@@ -114,7 +115,14 @@ export default async function Page({
                             Search
                         </Button>
                     </div>
-                    <div className="listResult flex-[3_3_0%]">a</div>
+                    <div className="listResult flex-[3_3_0%]">
+                        <SearchItem />
+                        <SearchItem />
+                        <SearchItem />
+                        <SearchItem />
+                        <SearchItem />
+                        <SearchItem />
+                    </div>
                 </div>
             </div>
 
