@@ -145,6 +145,8 @@ model User {
     // Booking       Booking?   @relation(fields: [bookingId], references: [id])
     // bookingId     String?
     Booking       Booking[]
+    createdAt     DateTime   @default(now())
+    updatedAt     DateTime   @updatedAt
 }
 
 enum UserRole {
