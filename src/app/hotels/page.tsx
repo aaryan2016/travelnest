@@ -12,6 +12,17 @@ export interface searchParams {
     rooms: string,
 }
 
+export interface propertiesData {
+    id: string,
+    title: string,
+    description: string,
+    propertyType: "HOTEL" | "APARTMENT" | "RESORT" | "VILLA" | "GUESTHOUSE",
+    address: string,
+    city: string,
+    country: string,
+    images?: string[],
+}
+
 export default async function Page({
     searchParams,
 }: {
@@ -21,95 +32,13 @@ export default async function Page({
     //@ts-ignore
     const { destination, from, to, adult, kids, rooms } = await searchParams
 
-    // const properties = await fetchProperties({ destination })
+    const properties = await fetchProperties({ destination })
+    console.log(properties)
     return (
         <div>
             <Navbar />
-            {/* <div className="homeContainer mt-12 flex flex-col items-center gap-8"> */}
-            {/* <div className="w-[1024]">
-                    <h2>Search Results:</h2>
-                    <p>
-                        {properties[0]?.title}, {properties[0]?.city}
-                    </p>
-                </div> */}
-            {/* </div> */}
             <div className="listContainer flex justify-center mt-5">
                 <div className="listWrapper w-full max-w-screen-lg flex gap-5">
-                    {/* <div className="listSearch flex-1 p-3 rounded-xl sticky h-max top-3 bg-[#febb02]">
-                        <h1 className="lsTitle text-xl text-gray-700 font-bold mb-3">Search</h1>
-                        <div className="listItem flex flex-col gap-1 mb-2">
-                            <label
-                                className="text-sm"
-                                htmlFor="">Destination</label>
-                            <input
-                                className="h-8 border-none p-1 mb-2"
-                                placeholder={destination} type="text" />
-                            <label
-                                className="text-sm"
-                                htmlFor="">Check-in Date</label>
-                            <span
-                                className="h-8 p-1 bg-white mb-2 flex items-center cursor-pointer"
-                            >{`${format(from, "dd-MMM-yyyy")} to ${format(to, "dd-MMM-yyyy")}`}</span>
-                            <div className="lsItem flex flex-col gap-1 mb-2">
-                                <label
-                                    className="text-sm"
-                                    htmlFor="">Options</label>
-                                <div className="lsOptions p-3">
-                                    <div className="lsOptionItem flex justify-between mb-2 text-gray-700 text-sm">
-                                        <span className="lsOptionText">
-                                            Min Price <small>per night</small>
-                                        </span>
-                                        <input
-                                            className="lsOptionInput w-16 text-center"
-                                            min={0}
-                                            type="number" />
-                                    </div>
-                                    <div className="lsOptionItem flex justify-between mb-2 text-gray-700 text-sm">
-                                        <span className="lsOptionText">
-                                            Max Price <small>per night</small>
-                                        </span>
-                                        <input
-                                            className="lsOptionInput w-16 text-center"
-                                            min={0}
-                                            type="number" />
-                                    </div>
-                                    <div className="lsOptionItem flex justify-between mb-2 text-gray-700 text-sm">
-                                        <span className="lsOptionText">
-                                            Adults
-                                        </span>
-                                        <input
-                                            className="lsOptionInput w-16 text-center"
-                                            placeholder={adult}
-                                            min={1}
-                                            type="number" />
-                                    </div>
-                                    <div className="lsOptionItem flex justify-between mb-2 text-gray-700 text-sm">
-                                        <span className="lsOptionText">
-                                            kids
-                                        </span>
-                                        <input
-                                            className="lsOptionInput w-16 text-center"
-                                            placeholder={kids}
-                                            min={0}
-                                            type="number" />
-                                    </div>
-                                    <div className="lsOptionItem flex justify-between mb-2 text-gray-700 text-sm">
-                                        <span className="lsOptionText">
-                                            Room
-                                        </span>
-                                        <input
-                                            className="lsOptionInput w-16 text-center"
-                                            placeholder={rooms}
-                                            min={1}
-                                            type="number" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <Button className="p-3 bg-blue-900 text-white w-full font-semibold">
-                            Search
-                        </Button>
-                    </div> */}
                     <SearchItemFilter
                         destination={destination}
                         from={from}
@@ -119,12 +48,9 @@ export default async function Page({
                         rooms={rooms}
                     />
                     <div className="listResult flex-[3_3_0%]">
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
+                        {properties.map((property) => (
+                            <SearchItem key={property.id} id={property?.id} title={property?.title} description={property?.description} propertyType={property?.propertyType} address={property?.address} city={property?.city} country={property?.country} images={property?.images} />
+                        ))}
                     </div>
                 </div>
             </div>

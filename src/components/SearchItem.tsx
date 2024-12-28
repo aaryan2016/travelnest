@@ -1,7 +1,8 @@
 import React from 'react'
 import { Button } from './ui/button'
+import type { propertiesData } from '@/app/hotels/page'
 
-function SearchItem() {
+function SearchItem({id,title, description, propertyType, address, city, country, images}: propertiesData) {
     return (
         <div className='searchItem border-[1px] border-solid border-gray-300 p-3 rounded flex justify-between gap-5 mb-5'>
             <img
@@ -10,10 +11,10 @@ function SearchItem() {
                 alt="studio_apartment"
             />
             <div className="siDesc flex flex-col gap-2 flex-[2_2_0%]">
-                <h1 className="siTitle text-xl font-extrabold text-blue-800">Tower Street Apartments</h1>
+                <h1 className="siTitle text-xl font-extrabold text-blue-800">{title}</h1>
                 <span className="siDistance text-xs">500m from center</span>
                 <span className="siTaxiOp text-xs  bg-green-700 text-white w-max p-1 rounded">Free airport Taxi</span>
-                <span className="siSubtitle text-xs font-bold">Studio Apartment with Air Conditioning</span>
+                <span className="siSubtitle text-xs font-bold">Studio {propertyType} with Air Conditioning</span>
                 <span className="siFeatures text-xs">Entire Studio * 1 Bathroom * 1 Full Bed</span>
                 <span className="siCancelOp text-xs text-green-800 font-bold">Free Cancellation</span>
                 <span className="siCancelOpSubtitle text-xs text-green-800">You can cancel later, so lock in this great price today!</span>
