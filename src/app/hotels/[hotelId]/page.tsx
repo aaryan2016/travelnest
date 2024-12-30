@@ -1,12 +1,38 @@
 import Footer from '@/components/Footer'
+import HotelRoom from '@/components/HotelRoom'
 import MailList from '@/components/MailList'
 import Navbar from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
+import { db } from '@/server/db'
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
-function page() {
+interface propertyAmenities {
+    id: string,
+    createdAt: Date,
+    name: string,
+    icon: string | null,
+}
+
+export interface propertyRooms {
+    id: string,
+    title: string,
+    description: string,
+    images: string[],
+    propertyId: string,
+    price: number,
+    capacity: number,
+    quantity: number,
+    amenities: {
+        id: string,
+        createdAt: Date,
+        name: string,
+        icon: string | null,
+    }[]
+}
+
+export default async function page({ params }: { params: Promise<{ hotelId: string }> }) {
     const photos = [
         {
             id: 1,
@@ -33,6 +59,10 @@ function page() {
             src: "https://img.freepik.com/free-photo/3d-rendering-luxury-bedroom-suite-resort-hotel-with-twin-bed-living_105762-2018.jpg?t=st=1735388965~exp=1735392565~hmac=f5afd7adf63bf58606eec09075299a7f01f6239eda67b7c8f69524555a6eb7e6&w=996"
         }
     ]
+    const hotelId: string = (await params).hotelId
+    const propertyData = await fetchPropertyData({ id: hotelId })
+    const propertyAmenities: propertyAmenities[] | undefined = propertyData?.ameneties;
+    const propertyRooms: propertyRooms[] | undefined = propertyData?.rooms;
     return (
         <div>
             <Navbar />
@@ -52,8 +82,8 @@ function page() {
                     </span>
                     <div className="hotelImages flex flex-wrap justify-between">
                         {photos.map((photo) => (
-                            <div className="hotelImgWrapper w-1/3" key={photo.id}>
-                                <img src={photo.src} alt="" className="hotelImg w-full object-cover h-60 m-[2px]" />
+                            <div className="hotelImgWrapper w-1/3 p-1" key={photo.id}>
+                                <img src={photo.src} alt="" className="hotelImg w-full object-cover h-60 m-[2px] rounded-lg" />
                             </div>
                         ))}
                     </div>
@@ -65,7 +95,7 @@ function page() {
                                 Ipsam, praesentium ut. Repellat illum doloremque voluptatibus sapiente dolores accusamus possimus, inventore ducimus quidem debitis maxime quasi eius dolore ratione tenetur molestias, obcaecati optio sunt incidunt dicta. Laborum, asperiores suscipit?
                             </p>
                         </div>
-                        <div className="hotelDetailsPrice flex-1 bg-blue-100 p-5 flex flex-col gap-5">
+                        <div className="hotelDetailsPrice flex-1 bg-blue-100 p-5 flex flex-col gap-5 rounded">
                             <h1 className='font-bold text-lg text-[#555]'>Perfect for a 9-night stay!</h1>
                             <span className='text-sm'>
                                 Located in the real heart of Krakow, tis property has an excellent location score of 9.8!
@@ -76,12 +106,47 @@ function page() {
                             <Button>Reserve or Book Now!</Button>
                         </div>
                     </div>
+                    <div className='facilities mt-3'>
+                        <h1 className="facilityTitle font-bold text-lg">Most popular facilities</h1>
+                        <div className="facilityName flex mt-6">
+                            {propertyAmenities?.map(amenity => (
+                                <div key={amenity.id} className='flex font-semibold items-center mr-9'>
+                                    {/* @ts-ignore */}
+                                    <img className="h-8 mr-1" src={amenity.icon} alt="" />
+                                    <div>{amenity.name}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className='availibility mt-9'>
+                        <h1 className="availibilityTitle font-bold text-lg">Availability</h1>
+                        {propertyRooms?.map(room => (
+                            <div key={room.id}>
+                                <HotelRoom props={room} />
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <MailList />
                 <Footer />
             </div>
-        </div>
+        </div >
     )
 }
 
-export default page
+export const fetchPropertyData = async ({ id }: { id: string }) => {
+    const res = await db.property.findFirst({
+        where: {
+            id
+        },
+        select: {
+            ameneties: true,
+            rooms: {
+                include: {
+                    amenities: true
+                }
+            }
+        }
+    })
+    return res;
+}

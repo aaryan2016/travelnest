@@ -1,8 +1,9 @@
 import React from 'react'
 import { Button } from './ui/button'
 import type { propertiesData } from '@/app/hotels/page'
+import Link from 'next/link'
 
-function SearchItem({id,title, description, propertyType, address, city, country, images}: propertiesData) {
+function SearchItem({ id, title, description, propertyType, address, city, country, images }: propertiesData) {
     return (
         <div className='searchItem border-[1px] border-solid border-gray-300 p-3 rounded flex justify-between gap-5 mb-5'>
             <img
@@ -11,7 +12,9 @@ function SearchItem({id,title, description, propertyType, address, city, country
                 alt="studio_apartment"
             />
             <div className="siDesc flex flex-col gap-2 flex-[2_2_0%]">
-                <h1 className="siTitle text-xl font-extrabold text-blue-800">{title}</h1>
+                <Link href={`/hotels/${id}`}>
+                    <h1 className="siTitle text-xl font-extrabold text-blue-800">{title}</h1>
+                </Link>
                 <span className="siDistance text-xs">500m from center</span>
                 <span className="siTaxiOp text-xs  bg-green-700 text-white w-max p-1 rounded">Free airport Taxi</span>
                 <span className="siSubtitle text-xs font-bold">Studio {propertyType} with Air Conditioning</span>
