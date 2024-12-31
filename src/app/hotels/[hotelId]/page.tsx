@@ -15,18 +15,25 @@ interface propertyAmenities {
     icon: string | null,
 }
 
+interface propertyData {
+    id: string,
+    title: string,
+    description: string,
+    address: string,
+    city: string,
+    ameneties: propertyAmenities[],
+    rooms: propertyRooms[]
+}
+
 export interface propertyRooms {
     id: string,
     title: string,
     description: string,
-    images: string[],
-    propertyId: string,
     price: number,
     capacity: number,
     quantity: number,
     amenities: {
         id: string,
-        createdAt: Date,
         name: string,
         icon: string | null,
     }[]
@@ -60,7 +67,7 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
         }
     ]
     const hotelId: string = (await params).hotelId
-    const propertyData = await fetchPropertyData({ id: hotelId })
+    const propertyData: propertyData | null = await fetchPropertyData({ id: hotelId })
     const propertyAmenities: propertyAmenities[] | undefined = propertyData?.ameneties;
     const propertyRooms: propertyRooms[] | undefined = propertyData?.rooms;
     return (
@@ -69,10 +76,10 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
             <div className="hotelContainer flex flex-col items-center mt-5">
                 <div className="hotelWrapper w-full max-w-screen-lg flex flex-col gap-3 relative">
                     <Button className='bookNow absolute top-3 right-0'>Reserve or Book Now!</Button>
-                    <h1 className="hotelTitle font-bold text-2xl">Grand Hotel</h1>
+                    <h1 className="hotelTitle font-bold text-2xl">{propertyData?.title}</h1>
                     <div className="hotelAddress text-xs flex items-center gap-3">
                         <FontAwesomeIcon icon={faLocationDot} className='h-4' />
-                        <span>Elton St 125 New York</span>
+                        <span>{propertyData?.address}</span>
                     </div>
                     <span className="hotelDistance text-[#0071c2] font-medium">
                         Excellent Location - 500m from center
@@ -89,8 +96,9 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
                     </div>
                     <div className="hotelDetails flex justify-between gap-5 mt-5">
                         <div className="hotelDetailsText flex-[3_3_0%]">
-                            <h1 className='hotelTitle font-bold text-2xl'>Stay in the heart of Krakow</h1>
+                            <h1 className='hotelTitle font-bold text-2xl'>Stay in the heart of {propertyData?.city}</h1>
                             <p className="hotelDesc text-sm mt-5">
+                                {propertyData?.description}
                                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et saepe modi earum aperiam maiores. Ipsam, labore facere ea consequatur dolores voluptatibus rerum laudantium suscipit similique ullam inventore nisi quam ipsum.
                                 Ipsam, praesentium ut. Repellat illum doloremque voluptatibus sapiente dolores accusamus possimus, inventore ducimus quidem debitis maxime quasi eius dolore ratione tenetur molestias, obcaecati optio sunt incidunt dicta. Laborum, asperiores suscipit?
                             </p>
@@ -98,7 +106,7 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
                         <div className="hotelDetailsPrice flex-1 bg-blue-100 p-5 flex flex-col gap-5 rounded">
                             <h1 className='font-bold text-lg text-[#555]'>Perfect for a 9-night stay!</h1>
                             <span className='text-sm'>
-                                Located in the real heart of Krakow, tis property has an excellent location score of 9.8!
+                                Located in the real heart of {propertyData?.city}, this property has an excellent location score of 9.8!
                             </span>
                             <h2 className='font-light text-xl'>
                                 <b className='font-bold'>$945</b> (9 nights)
@@ -134,16 +142,33 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
     )
 }
 
-export const fetchPropertyData = async ({ id }: { id: string }) => {
+export const fetchPropertyData = async ({ id }: { id: string }): Promise<propertyData | null> => {
     const res = await db.property.findFirst({
         where: {
             id
         },
         select: {
+            id: true,
+            title: true,
+            description: true,
+            address: true,
+            city: true,
             ameneties: true,
             rooms: {
-                include: {
-                    amenities: true
+                select: {
+                    id: true,
+                    title: true,
+                    description: true,
+                    price: true,
+                    capacity: true,
+                    quantity: true,
+                    amenities: {
+                        select: {
+                            id: true,
+                            name: true,
+                            icon: true,
+                        }
+                    }
                 }
             }
         }

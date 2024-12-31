@@ -3,7 +3,8 @@ import { Button } from './ui/button'
 import type { propertiesData } from '@/app/hotels/page'
 import Link from 'next/link'
 
-function SearchItem({ id, title, description, propertyType, address, city, country, images }: propertiesData) {
+function SearchItem({ id, title, propertyType, rooms }: propertiesData) {
+    const lowestPrice = Math.min(...rooms.map(room => room.price));
     return (
         <div className='searchItem border-[1px] border-solid border-gray-300 p-3 rounded flex justify-between gap-5 mb-5'>
             <img
@@ -28,11 +29,12 @@ function SearchItem({ id, title, description, propertyType, address, city, count
                     <button className='bg-[#003580] text-white p-1 font-bold border-none' type='button'>8.9</button>
                 </div>
                 <div className="siDetailsTexts text-right flex flex-col gap-1">
-                    <span className="siPrice text-2xl">$123</span>
+                    <span className="siPrice text-2xl">${lowestPrice.toFixed(0)}</span>
                     <span className="siTaxOp text-xs text-gray-500">Includes taxes and fees</span>
                     <Button
-                        className='siCheckButton font-semibold'
-                    >See Availibility</Button>
+                        className='siCheckButton font-semibold'>
+                        See Availibility
+                    </Button>
                 </div>
             </div>
         </div>

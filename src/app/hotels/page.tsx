@@ -15,12 +15,11 @@ export interface searchParams {
 export interface propertiesData {
     id: string,
     title: string,
-    description: string,
     propertyType: "HOTEL" | "APARTMENT" | "RESORT" | "VILLA" | "GUESTHOUSE",
-    address: string,
-    city: string,
-    country: string,
-    images?: string[],
+    rooms: {
+        id: string,
+        price: number
+    }[]
 }
 
 export default async function Page({
@@ -49,7 +48,7 @@ export default async function Page({
                     />
                     <div className="listResult flex-[3_3_0%]">
                         {properties.map((property) => (
-                            <SearchItem key={property.id} id={property?.id} title={property?.title} description={property?.description} propertyType={property?.propertyType} address={property?.address} city={property?.city} country={property?.country} images={property?.images} />
+                            <SearchItem key={property.id} id={property?.id} title={property?.title} propertyType={property?.propertyType} rooms={property.rooms} />
                         ))}
                     </div>
                 </div>
@@ -62,7 +61,11 @@ export default async function Page({
 export const fetchProperties = ({ destination }: { destination: string }) => {
     const res = db.property.findMany({
         where: {
-            city: { contains: destination, mode: 'insensitive' }
+            city: { contains: destination, mode: 'insensitive' },
+        },
+        select: {
+            id: true, title: true, propertyType: true,
+            rooms: { select: { id: true, price: true } }
         }
     })
     return res;

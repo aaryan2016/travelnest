@@ -325,13 +325,13 @@ const cityCountryMap = [
 async function main() {
   // Seed Users
   const users = await Promise.all(
-    Array.from({ length: 25 }).map(async (_, i) => {
+    Array.from({ length: 10 }).map(async (_, i) => {
       return db.user.create({
         data: {
           username: faker.internet.username(),
           email: faker.internet.email(),
           password: faker.internet.password({ length: 10 }), // Replace with hashed password in real usage
-          role: i === 0 ? UserRole.HOST : UserRole.GUEST, // First user is the HOST
+          role: i === 0 ? UserRole.ADMIN : UserRole.GUEST, // First user is the ADMIN
         },
       });
     })
@@ -386,7 +386,7 @@ async function main() {
                   description: faker.lorem.sentence(),
                   price: faker.number.float({ min: 50, max: 500 }),
                   capacity: faker.number.int({ min: 1, max: 6 }),
-                  quantity: faker.number.int({ min: 1, max: 20 }),
+                  quantity: faker.number.int({ min: 1, max: 10 }),
                   images: Array.from({ length: 6 }).map(() => faker.image.url()),
                   amenities: { connect: roomAmenities.map((amenity) => ({ id: amenity.id })) },
                 })),
@@ -401,47 +401,48 @@ async function main() {
       );
 
       // Optionally, create more properties for the city
-      const additionalProperties = await Promise.all(
-        Array.from({ length: faker.number.int({ min: 1, max: 5 }) }).map(async () => {
-          const property = await db.property.create({
-            data: {
-              title: faker.company.name(),
-              description: faker.lorem.paragraph(),
-              propertyType: faker.helpers.arrayElement(Object.values(PropertyType)),
-              address: faker.location.streetAddress(),
-              city: city,  // Ensure the same city
-              country: country,  // Ensure the same country
-              images: Array.from({ length: 3 }).map(() => faker.image.url()),
-              createdBy: { connect: { id: users[0]?.id } }, // Connect to the first user (Host)
-              ameneties: { connect: amenities.map((amenity) => ({ id: amenity.id })) },
-              rooms: {
-                create: Array.from({ length: 5 }).map(() => ({
-                  title: faker.commerce.productName(),
-                  description: faker.lorem.sentence(),
-                  price: faker.number.float({ min: 50, max: 500 }),
-                  capacity: faker.number.int({ min: 1, max: 6 }),
-                  quantity: faker.number.int({ min: 1, max: 20 }),
-                  images: Array.from({ length: 6 }).map(() => faker.image.url()),
-                  amenities: { connect: roomAmenities.map((amenity) => ({ id: amenity.id })) },
-                })),
-              },
-            },
-            include: {
-              rooms: true, // Include rooms to use their IDs later for bookings
-            },
-          });
-          return property;
-        })
-      );
+      // const additionalProperties = await Promise.all(
+      //   Array.from({ length: faker.number.int({ min: 1, max: 5 }) }).map(async () => {
+      //     const property = await db.property.create({
+      //       data: {
+      //         title: faker.company.name(),
+      //         description: faker.lorem.paragraph(),
+      //         propertyType: faker.helpers.arrayElement(Object.values(PropertyType)),
+      //         address: faker.location.streetAddress(),
+      //         city: city,  // Ensure the same city
+      //         country: country,  // Ensure the same country
+      //         images: Array.from({ length: 3 }).map(() => faker.image.url()),
+      //         createdBy: { connect: { id: users[0]?.id } }, // Connect to the first user (Host)
+      //         ameneties: { connect: amenities.map((amenity) => ({ id: amenity.id })) },
+      //         rooms: {
+      //           create: Array.from({ length: 5 }).map(() => ({
+      //             title: faker.commerce.productName(),
+      //             description: faker.lorem.sentence(),
+      //             price: faker.number.float({ min: 50, max: 500 }),
+      //             capacity: faker.number.int({ min: 1, max: 6 }),
+      //             quantity: faker.number.int({ min: 1, max: 10 }),
+      //             images: Array.from({ length: 6 }).map(() => faker.image.url()),
+      //             amenities: { connect: roomAmenities.map((amenity) => ({ id: amenity.id })) },
+      //           })),
+      //         },
+      //       },
+      //       include: {
+      //         rooms: true, // Include rooms to use their IDs later for bookings
+      //       },
+      //     });
+      //     return property;
+      //   })
+      // );
 
       // Combine the properties to have at least 5 properties for the city
-      return [...cityProperties, ...additionalProperties];
+      // return [...cityProperties, ...additionalProperties];
+      return [...cityProperties];
     })
   );
 
   // Seed Bookings
   await Promise.all(
-    Array.from({ length: 150 }).map(async () => {
+    Array.from({ length: 50 }).map(async () => {
       const randomProperty = faker.helpers.arrayElement(properties.flat());
       const randomRoom = faker.helpers.arrayElement(randomProperty.rooms);
 
