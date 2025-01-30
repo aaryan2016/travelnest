@@ -1,6 +1,6 @@
 "use client"
 
-import type { propertyRooms } from '@/app/hotels/[hotelId]/page'
+import type { propertyRooms } from '@/app/(main)/hotels/[hotelId]/page'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState } from 'react'

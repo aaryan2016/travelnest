@@ -1,5 +1,5 @@
 import SearchItem from "@/components/SearchItem";
-import { db } from "../../server/db";
+import { db } from "../../../server/db";
 import Navbar from "@/components/Navbar";
 import SearchItemFilter from "@/components/SearchItemFilter";
 

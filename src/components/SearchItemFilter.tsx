@@ -1,7 +1,7 @@
 "use client"
 import type React from 'react'
 import { useState } from 'react'
-import type { searchParams } from '@/app/hotels/page'
+import type { searchParams } from '@/app/(main)/hotels/page'
 import { Button } from './ui/button'
 import type { DateRange } from 'react-day-picker'
 import { DatePickerWithRange } from './ui/DatePickerWithRange'

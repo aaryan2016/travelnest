@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from './ui/button'
-import type { propertiesData } from '@/app/hotels/page'
+import type { propertiesData } from '@/app/(main)/hotels/page'
 import Link from 'next/link'
 
 function SearchItem({ id, title, propertyType, rooms }: propertiesData) {
