@@ -24,10 +24,15 @@ export const authOptions: NextAuthOptions = {
                     })
                     if (!user) {
                         throw new Error('No user with this email')
-                        return null;
                     }
 
-                    return user;
+                    const isPasswordCorrect = user.password === credentials.password
+                    if (isPasswordCorrect) {
+                        return user
+                    } else {
+                        // return null
+                        throw new Error("Incorrect Password")
+                    }
                     // const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
                     // if (isPasswordCorrect) {
                     //     return user

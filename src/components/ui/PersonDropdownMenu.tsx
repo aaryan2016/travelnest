@@ -31,15 +31,15 @@ export const PersonDropdownMenu: React.FC<PersonDropdownMenuProps> = ({ options,
                 <span className="optionText">Children</span>
                 <div className="optionCounter flex gap-[10px] items-center">
                     <Button
-                        disabled={options.children <= 0}
+                        disabled={options.kids <= 0}
                         variant={"outline"}
                         className="optionCounterButton hover:bg-blue-700 hover:text-white"
-                        onClick={() => handleOptions("children", "d")}>-</Button>
-                    <span className="optionCounterNumber">{options.children}</span>
+                        onClick={() => handleOptions("kids", "d")}>-</Button>
+                    <span className="optionCounterNumber">{options.kids}</span>
                     <Button
                         variant={"outline"}
                         className="optionCounterButton hover:bg-blue-700 hover:text-white"
-                        onClick={() => handleOptions("children", "i")}>+</Button>
+                        onClick={() => handleOptions("kids", "i")}>+</Button>
                 </div>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex justify-between items-center mb-1">

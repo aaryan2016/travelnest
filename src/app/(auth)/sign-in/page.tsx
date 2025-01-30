@@ -22,42 +22,121 @@
 //     )
 // }
 
+// 'use client';
+
+// import { useState } from 'react';
+// import { useForm, SubmitHandler } from 'react-hook-form';
+// import { signIn } from 'next-auth/react';
+// import { useSearchParams } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
+// import { Input } from '@/components/ui/input';
+// import { Button } from '@/components/ui/button';
+// import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+// import { Label } from '@/components/ui/label';
+// import { Loader2 } from 'lucide-react';
+
+// interface SignInFormInputs {
+//     identifier: string;
+//     password: string;
+// }
+
+// export default function SignInPage() {
+//     const {
+//         register,
+//         handleSubmit,
+//         formState: { errors },
+//     } = useForm<SignInFormInputs>();
+//     const [loading, setLoading] = useState(false);
+//     const searchParams = useSearchParams();
+//     const router = useRouter();
+//     const callbackUrl = searchParams.get('callbackUrl') || '/';
+//     const errorMsg = searchParams.get('error') ? 'Invalid credentials. Please try again.' : '';
+
+//     const onSubmit: SubmitHandler<SignInFormInputs> = async (data: { identifier: any; password: any; }) => {
+//         setLoading(true);
+//         const result = await signIn('credentials', {
+//             identifier: data.identifier,
+//             password: data.password,
+//             redirect: false,
+//         });
+//         setLoading(false);
+
+//         if (result?.error) {
+//             router.push(`/sign-in?error=true`);
+//         } else {
+//             router.push(callbackUrl);
+//         }
+//     };
+
+//     return (
+//         <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+//             <Card className="w-full max-w-md shadow-lg">
+//                 <CardHeader>
+//                     <CardTitle className="text-center text-2xl font-bold">Sign In</CardTitle>
+//                 </CardHeader>
+//                 <CardContent>
+//                     {errorMsg && <p className="mb-4 text-center text-red-500">{errorMsg}</p>}
+//                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+//                         <div>
+//                             <Label htmlFor="identifier">Email or Username</Label>
+//                             <Input id="identifier" {...register('identifier', { required: 'This field is required' })} />
+//                             {errors.identifier && <p className="text-sm text-red-500">
+//                                 {errors.identifier.message} </p>}
+//                         </div>
+//                         <div>
+//                             <Label htmlFor="password">Password</Label>
+//                             <Input id="password" type="password" {...register('password', { required: 'Password is required' })} />
+//                             {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+//                         </div>
+//                         <Button type="submit" className="w-full" disabled={loading}>
+//                             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Sign In'}
+//                         </Button>
+//                     </form>
+//                 </CardContent>
+//             </Card>
+//         </div>
+//     );
+// }
+
 'use client';
 
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
 
-interface SignInFormInputs {
+// Define form input types
+type SignInFormInputs = {
     identifier: string;
     password: string;
-}
+};
 
 export default function SignInPage() {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<SignInFormInputs>();
+    } = useForm<SignInFormInputs>(); // Ensure the type is passed to useForm
+
     const [loading, setLoading] = useState(false);
     const searchParams = useSearchParams();
     const router = useRouter();
-    const callbackUrl = searchParams.get('callbackUrl') || '/';
+    // const callbackUrl = searchParams.get('callbackUrl') || '/';
+    const callbackUrl = '/';
     const errorMsg = searchParams.get('error') ? 'Invalid credentials. Please try again.' : '';
 
-    const onSubmit: SubmitHandler<SignInFormInputs> = async (data: { identifier: any; password: any; }) => {
+    // Ensure onSubmit has the correct type
+    const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
         setLoading(true);
         const result = await signIn('credentials', {
             identifier: data.identifier,
             password: data.password,
-            redirect: false,
+            redirect: true,
         });
         setLoading(false);
 
@@ -69,29 +148,29 @@ export default function SignInPage() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-            <Card className="w-full max-w-md shadow-lg">
-                <CardHeader>
-                    <CardTitle className="text-center text-2xl font-bold">Sign In</CardTitle>
+        <div className="flex min-h-screen items-center justify-center bg-blue-100 p-4">
+            <Card className="w-full max-w-md shadow-lg rounded-xl bg-white border border-gray-200">
+                <CardHeader className="bg-blue-600 text-white p-4 rounded-t-xl">
+                    <CardTitle className="text-center text-2xl font-bold">Sign in to your account</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-6">
                     {errorMsg && <p className="mb-4 text-center text-red-500">{errorMsg}</p>}
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div>
-                            <Label htmlFor="identifier">Email or Username</Label>
-                            <Input id="identifier" {...register('identifier', { required: 'This field is required' })} />
-                            {errors.identifier && <p className="text-sm text-red-500">
-                                {errors.identifier.message} </p>}
+                            <Label htmlFor="identifier" className="text-gray-700 font-semibold">Email or Username</Label>
+                            <Input id="identifier" {...register('identifier', { required: 'This field is required' })} className="mt-1 p-3 w-full border border-gray-300 rounded-md shadow-sm" />
+                            {errors.identifier && <p className="text-sm text-red-500">{errors.identifier.message}</p>}
                         </div>
                         <div>
-                            <Label htmlFor="password">Password</Label>
-                            <Input id="password" type="password" {...register('password', { required: 'Password is required' })} />
+                            <Label htmlFor="password" className="text-gray-700 font-semibold">Password</Label>
+                            <Input id="password" type="password" {...register('password', { required: 'Password is required' })} className="mt-1 p-3 w-full border border-gray-300 rounded-md shadow-sm" />
                             {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
                         </div>
-                        <Button type="submit" className="w-full" disabled={loading}>
+                        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-md shadow-md" disabled={loading}>
                             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Sign In'}
                         </Button>
                     </form>
+                    <p className="text-center text-gray-600 mt-4">Don't have an account? <a href="/sign-up" className="text-blue-600 hover:underline">Sign up</a></p>
                 </CardContent>
             </Card>
         </div>

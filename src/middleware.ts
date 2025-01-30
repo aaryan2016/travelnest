@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
             url.pathname.startsWith('/sign-up')
         )
     ) {
-        return NextResponse.redirect(new URL('/hotels', request.url))
+        return NextResponse.redirect(new URL('/', request.url))
     }
 
     // return NextResponse.redirect(new URL('/sign-in', request.url))

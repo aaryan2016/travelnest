@@ -28,7 +28,7 @@ export default async function Page({
     searchParams?: searchParams
 }) {
 
-    //@ts-ignore
+    //@ts-expect-error
     const { destination, from, to, adult, kids, rooms } = await searchParams
 
     const properties = await fetchProperties({ destination })
