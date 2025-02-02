@@ -22,16 +22,28 @@ export interface propertiesData {
     }[]
 }[]
 
+const calculateNights = (from: string, to: string) => {
+    const fromDate = new Date(from)
+    const toDate = new Date(to)
+    const timeDiff = toDate.getTime() - fromDate.getTime()
+    return timeDiff / (1000 * 3600 * 24) // Convert milliseconds to days
+}
+
 export default async function Page({
     searchParams,
 }: {
     searchParams?: searchParams
 }) {
+    // Handle the case where searchParams is null or undefined
+    if (!searchParams) {
+        return <div>No search parameters provided</div>;
+    }
 
-    //@ts-expect-error
     const { destination, from, to, adult, kids, rooms } = await searchParams
 
+    const numberOfNights = calculateNights(from, to)
     const properties: propertiesData[] | null = await fetchProperties({ destination })
+    console.log("length: ", properties?.length)
     console.log(properties)
     return (
         <div>
@@ -47,9 +59,12 @@ export default async function Page({
                         rooms={rooms}
                     />
                     <div className="listResult flex-[3_3_0%]">
-                        {properties?.map((property) => (
-                            <SearchItem key={property.id} id={property?.id} title={property?.title} propertyType={property?.propertyType} rooms={property.rooms} />
-                        ))}
+                        {(properties?.length) ?
+                            properties?.map((property) => (
+                                <SearchItem key={property.id} id={property?.id} title={property?.title} propertyType={property?.propertyType} rooms={property.rooms} />)
+                            ) :
+                            <p>No properties found for the location: {destination}</p>
+                        }
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@ import { Button } from './ui/button'
 import type { propertiesData } from '@/app/(main)/hotels/page'
 import Link from 'next/link'
 
-function SearchItem({ id, title, propertyType, rooms }: propertiesData) {
+function SearchItem({ id, title, propertyType, rooms}: propertiesData) {
     const lowestPrice = Math.min(...rooms.map(room => room.price));
     return (
         <div className='searchItem border-[1px] border-solid border-gray-300 p-3 rounded flex justify-between gap-5 mb-5'>
