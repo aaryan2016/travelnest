@@ -106,7 +106,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
-import { registerUser } from "./registerUser";
+import { registerUser } from "@/app/actions";
 
 interface RegisterState {
     message: string;

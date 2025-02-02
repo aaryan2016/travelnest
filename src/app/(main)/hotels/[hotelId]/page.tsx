@@ -1,21 +1,21 @@
+import { fetchPropertyData } from '@/app/actions'
 import Footer from '@/components/Footer'
 import HotelRoom from '@/components/HotelRoom'
 import MailList from '@/components/MailList'
 import Navbar from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
-import { db } from '@/server/db'
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
-interface propertyAmenities {
+export interface propertyAmenities {
     id: string,
     createdAt: Date,
     name: string,
     icon: string | null,
 }
 
-interface propertyData {
+export interface propertyData {
     id: string,
     title: string,
     description: string,
@@ -140,38 +140,4 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
             </div>
         </div >
     )
-}
-
-export const fetchPropertyData = async ({ id }: { id: string }): Promise<propertyData | null> => {
-    const res = await db.property.findFirst({
-        where: {
-            id
-        },
-        select: {
-            id: true,
-            title: true,
-            description: true,
-            address: true,
-            city: true,
-            ameneties: true,
-            rooms: {
-                select: {
-                    id: true,
-                    title: true,
-                    description: true,
-                    price: true,
-                    capacity: true,
-                    quantity: true,
-                    amenities: {
-                        select: {
-                            id: true,
-                            name: true,
-                            icon: true,
-                        }
-                    }
-                }
-            }
-        }
-    })
-    return res;
 }

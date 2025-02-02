@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs"
 import { db } from "@/server/db";
@@ -12,6 +12,7 @@ export const authOptions: NextAuthOptions = {
                 username: { label: "Username", type: "text", placeholder: "jsmith" },
                 password: { label: "Password", type: "password" }
             },
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
             async authorize(credentials: any): Promise<any> {
                 try {
                     const user = await db.user.findFirst({
@@ -29,16 +30,16 @@ export const authOptions: NextAuthOptions = {
                     const isPasswordCorrect = user.password === credentials.password
                     if (isPasswordCorrect) {
                         return user
-                    } else {
-                        // return null
-                        throw new Error("Incorrect Password")
                     }
+                    // return null
+                    throw new Error("Incorrect Password")
                     // const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
                     // if (isPasswordCorrect) {
                     //     return user
                     // } else {
                     //     throw new Error("Incorrect Password")
                     // }
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 } catch (err: any) {
                     throw new Error(err)
                 }

@@ -1,63 +1,9 @@
-// "use server"
-
-// import { db } from "../../../server/db";
-
-// type RegisterState = {
-//     message: string;
-//     success: boolean;
-//     errors?: { username?: string; email?: string; password?: string };
-// }
-
-// export async function registerUser( prevState: RegisterState,formData: FormData,): Promise<RegisterState>  {
-//     try {
-//         // Check if user already exists
-//         const email = formData.get("email")?.toString()
-//         const username = formData.get("username")?.toString() || ""
-//         const password = formData.get("password")?.toString() || ""
-        
-//         if (!email || !username || !password) {
-//             return { message: "All fields are required.", success: false };
-//         }
-
-//         console.log("From action: ", email)
-//         const existingUser = await db.user.findUnique({
-//             where: { email },
-//         });
-
-//         if (existingUser) {
-//             return { message: "Email already in use.", success: false };
-//         }
-
-//         // Hash password
-//         // const hashedPassword = await bcrypt.hash(password, 10);
-//         const hashedPassword = password;
-
-//         // Create new user
-//         const newUser = await db.user.create({
-//             data: {
-//                 username,
-//                 email,
-//                 password: hashedPassword,
-//             },
-//         });
-//         console.log("User Created:", newUser);
-
-//         if (newUser){
-//             return { message: "Account created successfully!", success: true };
-//         }
-//         return {message: "Something went wrong.", success: false };
-
-//     } catch (error) {
-//         console.error("Registration error:", error);
-//         return { message: "Something went wrong.",success: false };
-//     }
-// }
-
-
 "use server";
 
 import { db } from "@/server/db";
 import bcrypt from "bcryptjs";
+import type { propertyData } from "./(main)/hotels/[hotelId]/page";
+import type { propertiesData } from "./(main)/hotels/page";
 
 interface RegisterState {
     message: string;
@@ -118,4 +64,53 @@ export async function registerUser(prevState: RegisterState, formData: FormData)
         console.error("Registration error:", error);
         return { message: "An error occurred during registration. Please try again.", success: false };
     }
+}
+
+export const fetchProperties = async ({ destination }: { destination: string }): Promise<propertiesData[] | null> => {
+    const res = await db.property.findMany({
+        where: {
+            city: { contains: destination, mode: 'insensitive' },
+        },
+        select: {
+            id: true, 
+            title: true, 
+            propertyType: true,
+            rooms: { select: { id: true, price: true } }
+        }
+    })
+    return res
+}
+
+export const fetchPropertyData = async ({ id }: { id: string }): Promise<propertyData | null> => {
+    const res = await db.property.findFirst({
+        where: {
+            id
+        },
+        select: {
+            id: true,
+            title: true,
+            description: true,
+            address: true,
+            city: true,
+            ameneties: true,
+            rooms: {
+                select: {
+                    id: true,
+                    title: true,
+                    description: true,
+                    price: true,
+                    capacity: true,
+                    quantity: true,
+                    amenities: {
+                        select: {
+                            id: true,
+                            name: true,
+                            icon: true,
+                        }
+                    }
+                }
+            }
+        }
+    })
+    return res;
 }

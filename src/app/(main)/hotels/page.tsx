@@ -1,7 +1,7 @@
 import SearchItem from "@/components/SearchItem";
-import { db } from "../../../server/db";
 import Navbar from "@/components/Navbar";
 import SearchItemFilter from "@/components/SearchItemFilter";
+import { fetchProperties } from "@/app/actions";
 
 export interface searchParams {
     destination: string,
@@ -20,7 +20,7 @@ export interface propertiesData {
         id: string,
         price: number
     }[]
-}
+}[]
 
 export default async function Page({
     searchParams,
@@ -31,7 +31,7 @@ export default async function Page({
     //@ts-expect-error
     const { destination, from, to, adult, kids, rooms } = await searchParams
 
-    const properties = await fetchProperties({ destination })
+    const properties: propertiesData[] | null = await fetchProperties({ destination })
     console.log(properties)
     return (
         <div>
@@ -47,7 +47,7 @@ export default async function Page({
                         rooms={rooms}
                     />
                     <div className="listResult flex-[3_3_0%]">
-                        {properties.map((property) => (
+                        {properties?.map((property) => (
                             <SearchItem key={property.id} id={property?.id} title={property?.title} propertyType={property?.propertyType} rooms={property.rooms} />
                         ))}
                     </div>
@@ -57,16 +57,3 @@ export default async function Page({
         </div>
     );
 };
-
-export const fetchProperties = ({ destination }: { destination: string }) => {
-    const res = db.property.findMany({
-        where: {
-            city: { contains: destination, mode: 'insensitive' },
-        },
-        select: {
-            id: true, title: true, propertyType: true,
-            rooms: { select: { id: true, price: true } }
-        }
-    })
-    return res;
-}
