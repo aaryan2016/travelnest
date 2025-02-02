@@ -101,7 +101,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
@@ -141,7 +141,7 @@ export default function SignInPage() {
         setLoading(false);
 
         if (result?.error) {
-            router.push(`/sign-in?error=true`);
+            router.push("/sign-in?error=true");
         } else {
             router.push(callbackUrl);
         }
