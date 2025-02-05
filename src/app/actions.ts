@@ -72,8 +72,8 @@ export const fetchProperties = async ({ destination }: { destination: string }):
             city: { contains: destination, mode: 'insensitive' },
         },
         select: {
-            id: true, 
-            title: true, 
+            id: true,
+            title: true,
             propertyType: true,
             rooms: { select: { id: true, price: true } }
         }
