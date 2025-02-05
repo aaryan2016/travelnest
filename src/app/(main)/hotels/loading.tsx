@@ -2,14 +2,14 @@
 
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function Page() {
+export default function Loading() {
     return (
         <div className='flex justify-center item-center'>
             <div className="flex flex-col gap-4 pb-24 pt-1 w-full max-w-screen-lg justify-center">
-                <div className="flex flex-col justify-between gap-4 lg:flex-row">
+                {/* <div className="flex flex-col justify-between gap-4 lg:flex-row">
                     <Skeleton className="h-8 w-3/4 md:w-1/2" />
                     <Skeleton className="h-10 w-full lg:w-64" />
-                </div>
+                </div> */}
                 <div className="flex justify-start mt-5 gap-6">
                     <Skeleton className="h-96 w-1/4" />
                     <div className="grid grid-cols-1 gap-5 w-full">
