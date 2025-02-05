@@ -126,17 +126,18 @@ export default function SignInPage() {
     const [loading, setLoading] = useState(false);
     const searchParams = useSearchParams();
     const router = useRouter();
+
+    // Get the callbackUrl from the query params
     // const callbackUrl = searchParams.get('callbackUrl') || '/';
-    const callbackUrl = '/';
+    const callbackUrl = decodeURIComponent(searchParams.get('callbackUrl') || '/');
     const errorMsg = searchParams.get('error') ? 'Invalid credentials. Please try again.' : '';
 
-    // Ensure onSubmit has the correct type
     const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
         setLoading(true);
         const result = await signIn('credentials', {
             identifier: data.identifier,
             password: data.password,
-            redirect: true,
+            redirect: false,
         });
         setLoading(false);
 

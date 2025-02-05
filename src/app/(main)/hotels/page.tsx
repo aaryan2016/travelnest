@@ -47,7 +47,7 @@ export default async function Page({
     console.log(properties)
     return (
         <div>
-            <Navbar />
+            {/* <Navbar /> */}
             <div className="listContainer flex justify-center mt-5">
                 <div className="listWrapper w-full max-w-screen-lg flex gap-5">
                     <SearchItemFilter

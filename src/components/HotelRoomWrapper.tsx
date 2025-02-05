@@ -27,8 +27,6 @@ export default function HotelRoomWrapper({ propertyRooms, from, to }: {
                 <HotelRoom
                     key={room.id}
                     props={room}
-                    from={from}
-                    to={to}
                     numberOfNights={numberOfNights}
                     selectedRoomsData={selectedRoomsData}
                     setSelectedRoomsData={setSelectedRoomsData} // Pass the state setter down

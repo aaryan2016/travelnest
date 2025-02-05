@@ -1,9 +1,8 @@
 import React from 'react'
-import { Button } from './ui/button'
 import type { propertiesData } from '@/app/(main)/hotels/page'
 import Link from 'next/link'
 
-function SearchItem({ id, title, propertyType, rooms}: propertiesData) {
+function SearchItem({ id, title, propertyType, rooms }: propertiesData) {
     const lowestPrice = Math.min(...rooms.map(room => room.price));
     return (
         <div className='searchItem border-[1px] border-solid border-gray-300 p-3 rounded flex justify-between gap-5 mb-5'>
@@ -31,10 +30,12 @@ function SearchItem({ id, title, propertyType, rooms}: propertiesData) {
                 <div className="siDetailsTexts text-right flex flex-col gap-1">
                     <span className="siPrice text-2xl">${lowestPrice.toFixed(0)}</span>
                     <span className="siTaxOp text-xs text-gray-500">Includes taxes and fees</span>
-                    <Button
-                        className='siCheckButton font-semibold'>
+                    <Link className='siCheckButton font-semibold bg-blue-950 text-white rounded w-full p-2 mt-2' href={`/hotels/${id}`}>
+                        {/* <Button
+                            className='siCheckButton font-semibold'> */}
                         See Availibility
-                    </Button>
+                        {/* </Button> */}
+                    </Link>
                 </div>
             </div>
         </div>

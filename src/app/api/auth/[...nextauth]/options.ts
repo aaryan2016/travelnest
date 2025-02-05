@@ -27,19 +27,20 @@ export const authOptions: NextAuthOptions = {
                         throw new Error('No user with this email')
                     }
 
-                    const isPasswordCorrect = user.password === credentials.password
-                    if (isPasswordCorrect) {
-                        return user
-                    }
-                    // return null
-                    throw new Error("Incorrect Password")
-                    // const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
+                    // const isPasswordCorrect = user.password === credentials.password
                     // if (isPasswordCorrect) {
                     //     return user
-                    // } else {
-                    //     throw new Error("Incorrect Password")
                     // }
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                    // // return null
+                    // throw new Error("Incorrect Password")
+
+                    const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
+                    if (isPasswordCorrect) {
+                        return user
+                    } else {
+                        throw new Error("Incorrect Password")
+                    }
+                    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 } catch (err: any) {
                     throw new Error(err)
                 }

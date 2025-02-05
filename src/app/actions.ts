@@ -47,8 +47,8 @@ export async function registerUser(prevState: RegisterState, formData: FormData)
         }
 
         // Hash password
-        // const hashedPassword = await bcrypt.hash(password, 10);
-        const hashedPassword = password;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        // const hashedPassword = password;
 
         // Create new user
         await db.user.create({

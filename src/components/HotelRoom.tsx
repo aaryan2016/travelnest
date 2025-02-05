@@ -212,10 +212,8 @@ import { Button } from './ui/button'
 
 const capacityIcon = "https://cdn-icons-png.flaticon.com/512/456/456212.png"
 
-function HotelRoom({ props, from, to, numberOfNights, selectedRoomsData, setSelectedRoomsData }: {
+function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsData }: {
     props: propertyRooms | undefined,
-    from: string,
-    to: string,
     numberOfNights: number,
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     selectedRoomsData: any[],

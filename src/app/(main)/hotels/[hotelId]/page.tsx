@@ -74,7 +74,7 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
         const propertyRooms: propertyRooms[] | undefined = propertyData?.rooms;
         return (
             <div>
-                <Navbar />
+                {/* <Navbar /> */}
                 <div className="hotelContainer flex flex-col items-center mt-5">
                     <div className="hotelWrapper w-full max-w-screen-lg flex flex-col gap-3 relative">
                         <Button className='bookNow absolute top-3 right-0'>Reserve or Book Now!</Button>

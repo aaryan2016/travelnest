@@ -9,7 +9,7 @@ import PropertyList from "@/components/PropertyList";
 export default function HomePage() {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <HeroSection />
       <div className="homeContainer mt-12 flex flex-col items-center gap-8">
         <Featured />

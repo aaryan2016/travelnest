@@ -1,12 +1,18 @@
 import { NextResponse, NextRequest } from 'next/server'
-// import type { NextRequest } from 'next/server'
 export { default } from "next-auth/middleware"
 import { getToken } from "next-auth/jwt"
 
-// This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
     const token = await getToken({ req: request })
     const url = request.nextUrl
+
+    // If the user is not authenticated and tries to access a protected route like /hotels
+    if (!token && url.pathname.startsWith('/hotels/')) {
+        // If not authenticated, redirect to the sign-in page with the original page's URL as a callbackUrl
+        const signInUrl = new URL('/sign-in', request.url)
+        signInUrl.searchParams.set('callbackUrl', url.href)  // Store the original destination URL
+        return NextResponse.redirect(signInUrl)
+    }
 
     if (token &&
         (
@@ -21,7 +27,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
     matcher: [
         '/sign-in',

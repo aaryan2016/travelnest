@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar";
 import AuthProvider from "@/context/AuthProvider";
 import "@/styles/globals.css";
 
@@ -18,7 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <AuthProvider>
-        <body>{children}</body>
+        <body>
+          <Navbar />
+          {children}
+        </body>
       </AuthProvider>
     </html>
   );
