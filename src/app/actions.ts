@@ -4,6 +4,10 @@ import { db } from "@/server/db";
 import bcrypt from "bcryptjs";
 import type { propertyData } from "./(main)/hotels/[hotelId]/page";
 import type { propertiesData } from "./(main)/hotels/page";
+import type { BookingState } from "@/components/PaymentForm";
+import { BookingStatus, PaymentStatus } from "@prisma/client"; // Enum imports
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/options";
 
 interface RegisterState {
     message: string;
@@ -113,4 +117,85 @@ export const fetchPropertyData = async ({ id }: { id: string }): Promise<propert
         }
     })
     return res;
+}
+
+export async function createBooking(prevState: BookingState, formData: FormData): Promise<BookingState> {
+    console.log({formData,})
+    const cardNumber = formData.get("cardNumber")?.toString() || "";
+    const expiryDate = formData.get("expiryDate")?.toString() || "";
+    const checkInDate = formData.get("checkInDate")?.toString() || "";
+    const checkOutDate = formData.get("checkOutDate")?.toString() || "";
+    const totalPrice = formData.get("totalPrice")?.toString() || "0";
+    const cvv = formData.get("cvv")?.toString() || "";
+
+    // Luhn Algorithm to validate credit card numbers
+    const validateCardNumber = (cardNumber: string) => {
+        const regex = /^\d{16}$/;
+        if (!regex.test(cardNumber)) return false;
+        let sum = 0;
+        let shouldDouble = false;
+        for (let i = cardNumber.length - 1; i >= 0; i--) {
+            let digit = Number.parseInt(cardNumber.charAt(i));
+            if (shouldDouble) {
+                digit *= 2;
+                if (digit > 9) digit -= 9;
+            }
+            sum += digit;
+            shouldDouble = !shouldDouble;
+        }
+        return sum % 10 === 0;
+    };
+
+    const session = await getServerSession(authOptions);
+    console.log("session: ", session)
+    if (!session?.user) {
+        return { message: "You must be logged in to create a booking.", success: false };
+    }
+    const userMail = session.user.email;
+
+    const errors: BookingState["errors"] = {};
+
+    // Validation logic for card details
+    if (!cardNumber || !/^\d{16}$/.test(cardNumber)) {
+        errors.cardNumber = "Invalid card number.";
+    }
+
+    if (!cardNumber || !validateCardNumber(cardNumber)) {
+        errors.cardNumber = "Invalid card number.";
+    }
+
+    if (!expiryDate || !/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate)) {
+        errors.expiryDate = "Invalid expiry date.";
+    }
+
+    if (!cvv || !/^\d{3}$/.test(cvv)) {
+        errors.cvv = "Invalid CVV.";
+    }
+
+    // If there are validation errors, return them
+    if (Object.keys(errors).length > 0) {
+        return { message: "Validation failed", success: false, errors };
+    }
+
+    try {
+        // Create a new booking entry in the database
+        const newBooking = await db.booking.create({
+            data: {
+                bookedByUser: {
+                    connect: { email: userMail }, // Link the user with the booking
+                },
+                checkInDate: new Date(checkInDate), // Example check-in date
+                checkOutDate: new Date(checkOutDate), // Example check-out date
+                noOfGuests: 1, // Example number of guests, should be taken from the form
+                totalPrice: Number.parseInt(totalPrice), // Example total price, should be dynamic
+                bookingStatus: BookingStatus.COMPLETED,
+                paymrntStatus: PaymentStatus.PAID,
+            },
+        });
+
+        return { message: "Booking created successfully!", success: true };
+    } catch (error) {
+        console.error("Error during booking:", error);
+        return { message: "An error occurred. Please try again.", success: false };
+    }
 }

@@ -141,7 +141,7 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
                                 <p>No available rooms.</p> // Handle case with no rooms available
                             )}
                         </div> */}
-                        <HotelRoomWrapper propertyRooms={propertyRooms} from="2025-02-10" to="2025-02-20" /> {/* Example dates */}
+                        <HotelRoomWrapper propertyName={propertyData?.title} propertyRooms={propertyRooms} from="2025-02-10" to="2025-02-20" /> {/* Example dates */}
                     </div>
                     <MailList />
                     <Footer />

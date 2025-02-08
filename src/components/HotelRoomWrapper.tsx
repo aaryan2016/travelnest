@@ -2,16 +2,26 @@
 
 import React, { useState } from 'react'
 import HotelRoom from './HotelRoom'
-import type { propertyData, propertyRooms } from '@/app/(main)/hotels/[hotelId]/page' // Adjust import path if necessary
+import type { propertyRooms } from '@/app/(main)/hotels/[hotelId]/page'
 import { Button } from './ui/button'
+import { useRouter } from 'next/navigation'
 
-export default function HotelRoomWrapper({ propertyRooms, from, to }: {
+export interface selectedRoomsData {
+    id: string,
+    title: string,
+    description: string,
+    quantity: number,
+    price: number,
+    roomType: string
+}
+
+export default function HotelRoomWrapper({ propertyName, propertyRooms, from, to }: {
+    propertyName: string | undefined,
     propertyRooms: propertyRooms[] | undefined,
     from: string,
     to: string
 }) {
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    const [selectedRoomsData, setSelectedRoomsData] = useState<any[]>([]) // Holds all selected rooms and their details
+    const [selectedRoomsData, setSelectedRoomsData] = useState<selectedRoomsData[]>([]) // Holds all selected rooms and their details
 
     console.log("selectedRoomsData", selectedRoomsData)
 
@@ -19,6 +29,19 @@ export default function HotelRoomWrapper({ propertyRooms, from, to }: {
 
     const totalPrice = selectedRoomsData.reduce((total, room) => total + room.price, 0)
     const totalRooms = selectedRoomsData.reduce((total, room) => total + room.quantity, 0)
+
+    const router = useRouter();
+
+    const handleProceedToPayment = () => {
+        // Convert selected rooms into a query string to pass to the checkout page
+        const selectedRoomsQuery = JSON.stringify(selectedRoomsData);
+        const fromQuery = encodeURIComponent(from);
+        const toQuery = encodeURIComponent(to);
+        const numberOfNightsQuery = numberOfNights;
+
+        // Redirect to the checkout page
+        router.push(`/checkout?selectedRooms=${selectedRoomsQuery}&from=${fromQuery}&to=${toQuery}&numberOfNights=${numberOfNightsQuery}&propertyName=${propertyName}`);
+    };
 
     return (
         <div className="hotelRoomWrapper flex flex-col gap-5">
@@ -42,7 +65,9 @@ export default function HotelRoomWrapper({ propertyRooms, from, to }: {
                     <div className='flex text-xl font-bold'>{totalRooms}</div>
                 </div>
                 <div className='mx-10'>
-                    <Button>Proceed for Payment</Button>
+                    <Button
+                        onClick={handleProceedToPayment}
+                        disabled={totalRooms <= 0}>Proceed for Payment</Button>
                 </div>
             </div>
         </div>

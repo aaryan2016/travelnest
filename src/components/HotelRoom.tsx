@@ -207,44 +207,47 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type React from 'react'
 import { useState } from 'react'
 import { Button } from './ui/button'
+import type { selectedRoomsData } from './HotelRoomWrapper'
 
 const capacityIcon = "https://cdn-icons-png.flaticon.com/512/456/456212.png"
 
 function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsData }: {
     props: propertyRooms | undefined,
     numberOfNights: number,
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    selectedRoomsData: any[],
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    setSelectedRoomsData: React.Dispatch<React.SetStateAction<any[]>>
+    selectedRoomsData: selectedRoomsData[],
+    setSelectedRoomsData: React.Dispatch<React.SetStateAction<selectedRoomsData[]>>
 }) {
     const capacityArray = Array(props?.capacity).fill(capacityIcon)
     const [selectedRooms, setSelectedRooms] = useState(1)
     const [showRoomControls, setShowRoomControls] = useState(false) // Controls visibility of increase/decrease buttons
     const [pricePerNight, setPricePerNight] = useState<number>(Number(props?.price.toFixed(0)) || 0)
 
-    // console.log("selectedRooms: ", selectedRooms)
-    // console.log("showRoomControls: ", showRoomControls)
-
     const maxRooms = props?.quantity ?? 0
 
     // Function to update selectedRoomsData state
     const updateSelectedRoomsData = (newSelectedRooms: number) => {
         const existingRoomIndex = selectedRoomsData.findIndex(room => room.id === props?.id)
+
+        // Check if the room exists in the selectedRoomsData
         if (existingRoomIndex !== -1) {
-            // If room exists in selectedRoomsData, update it
+            // If the room exists, make a copy of the selectedRoomsData and update the specific room
             const updatedRooms = [...selectedRoomsData]
-            updatedRooms[existingRoomIndex].quantity = newSelectedRooms
-            updatedRooms[existingRoomIndex].price = pricePerNight * newSelectedRooms * numberOfNights
-            setSelectedRoomsData(updatedRooms)
+
+            // Now, safely update the quantity and price
+            if (updatedRooms[existingRoomIndex]) {
+                updatedRooms[existingRoomIndex].quantity = newSelectedRooms
+                updatedRooms[existingRoomIndex].price = pricePerNight * newSelectedRooms * numberOfNights
+                setSelectedRoomsData(updatedRooms)
+            }
         } else {
             // If room doesn't exist, add it to the selection
             setSelectedRoomsData([...selectedRoomsData, {
-                id: props?.id,
-                title: props?.title,
+                id: props?.id || "",
+                description: props?.description || "",
+                title: props?.title || "",
                 quantity: newSelectedRooms,
                 price: pricePerNight * newSelectedRooms * numberOfNights,
-                roomType: props?.title
+                roomType: props?.title || ""
             }])
         }
     }
