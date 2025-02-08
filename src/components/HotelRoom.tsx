@@ -199,8 +199,6 @@
 // export default HotelRoom
 
 
-// HotelRoom.tsx (Client Component)
-
 "use client"
 
 import type { propertyRooms } from '@/app/(main)/hotels/[hotelId]/page'
@@ -224,6 +222,9 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
     const [selectedRooms, setSelectedRooms] = useState(1)
     const [showRoomControls, setShowRoomControls] = useState(false) // Controls visibility of increase/decrease buttons
     const [pricePerNight, setPricePerNight] = useState<number>(Number(props?.price.toFixed(0)) || 0)
+
+    // console.log("selectedRooms: ", selectedRooms)
+    // console.log("showRoomControls: ", showRoomControls)
 
     const maxRooms = props?.quantity ?? 0
 
@@ -252,8 +253,6 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
         if (selectedRooms < maxRooms) {
             const newSelectedRooms = selectedRooms + 1
             setSelectedRooms(newSelectedRooms)
-            // biome-ignore lint/style/noNonNullAssertion: <explanation>
-            setPricePerNight(pricePerNight! * newSelectedRooms)
             updateSelectedRoomsData(newSelectedRooms)
         }
     }
@@ -262,22 +261,21 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
         if (selectedRooms > 0) {
             const newSelectedRooms = selectedRooms - 1
             setSelectedRooms(newSelectedRooms)
-            // biome-ignore lint/style/noNonNullAssertion: <explanation>
-            setPricePerNight(pricePerNight! * newSelectedRooms)
             updateSelectedRoomsData(newSelectedRooms)
+        }
+    }
+
+    const handleAddToSelection = () => {
+        setShowRoomControls(true)
+        updateSelectedRoomsData(selectedRooms)
+        if (selectedRooms === 0) {
+            setSelectedRooms(1) // Set at least 1 room if selectedRooms is 0
+            updateSelectedRoomsData(selectedRooms + 1)
         }
     }
 
     if (selectedRooms === 0 && showRoomControls) {
         setShowRoomControls(false)
-    }
-
-    const handleAddToSelection = () => {
-        // Show the controls for increasing/decreasing room selection
-        setShowRoomControls(true)
-
-        // Initial add to selectedRoomsData
-        updateSelectedRoomsData(selectedRooms)
     }
 
     return (

@@ -1,5 +1,3 @@
-// components/HotelRoomWrapper.tsx (Client Component)
-
 "use client"
 
 import React, { useState } from 'react'
@@ -20,6 +18,7 @@ export default function HotelRoomWrapper({ propertyRooms, from, to }: {
     const numberOfNights = (new Date(to).getTime() - new Date(from).getTime()) / (1000 * 3600 * 24) // Calculate number of nights
 
     const totalPrice = selectedRoomsData.reduce((total, room) => total + room.price, 0)
+    const totalRooms = selectedRoomsData.reduce((total, room) => total + room.quantity, 0)
 
     return (
         <div className="hotelRoomWrapper flex flex-col gap-5">
@@ -37,6 +36,10 @@ export default function HotelRoomWrapper({ propertyRooms, from, to }: {
                 <div className='flex'>
                     <div className='font-semibold text-lg'>Price for {numberOfNights} Nights: $ </div>
                     <div className='flex text-xl font-bold'>{totalPrice}</div>
+                </div>
+                <div className='flex'>
+                    <div className='font-semibold text-lg'>Total Rooms: </div>
+                    <div className='flex text-xl font-bold'>{totalRooms}</div>
                 </div>
                 <div className='mx-10'>
                     <Button>Proceed for Payment</Button>
