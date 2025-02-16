@@ -37,9 +37,8 @@ export const authOptions: NextAuthOptions = {
                     const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
                     if (isPasswordCorrect) {
                         return user
-                    } else {
-                        throw new Error("Incorrect Password")
                     }
+                    throw new Error("Incorrect Password")
                     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 } catch (err: any) {
                     throw new Error(err)
@@ -50,17 +49,21 @@ export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(db),
     callbacks: {
         async jwt({ token, user }) {
+            // console.log('JWT Callback - user:', user);
             if (user) {
-                token._id = user._id?.toString()
+                token._id = user.id
                 token.username = user.username
             }
+            // console.log('JWT Callback - token:', token);  // Log token to check if _id is assigned
             return token
         },
         async session({ session, token }) {
+            // console.log('Session Callback - token:', token);  // Log token data
             if (token) {
                 session.user._id = token._id
                 session.user.username = token.username
             }
+            // console.log('Session Callback - session:', session);  // Log session to check if _id is assigned
             return session
         }
     },

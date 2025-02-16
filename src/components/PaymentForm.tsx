@@ -114,6 +114,11 @@ const PaymentForm = ({
                         defaultValue={totalPrice}
                         className="hidden"
                     />
+                    <input
+                        type="hidden"
+                        name="selectedRooms"
+                        value={JSON.stringify(selectedRooms)} // Serialize the selected rooms
+                    />
                 </div>
                 <Button
                     type="submit"

@@ -127,6 +127,7 @@ export async function createBooking(prevState: BookingState, formData: FormData)
     const checkOutDate = formData.get("checkOutDate")?.toString() || "";
     const totalPrice = formData.get("totalPrice")?.toString() || "0";
     const cvv = formData.get("cvv")?.toString() || "";
+    const selectedRooms = JSON.parse(formData.get("selectedRooms")?.toString() || "[]"); // Make sure to send selectedRooms as a JSON string
 
     // Luhn Algorithm to validate credit card numbers
     const validateCardNumber = (cardNumber: string) => {
@@ -190,6 +191,9 @@ export async function createBooking(prevState: BookingState, formData: FormData)
                 totalPrice: Number.parseInt(totalPrice), // Example total price, should be dynamic
                 bookingStatus: BookingStatus.COMPLETED,
                 paymrntStatus: PaymentStatus.PAID,
+                roomsBooked: {
+                    connect: selectedRooms.map((room: { id: string }) => ({ id: room.id })),
+                },
             },
         });
 
