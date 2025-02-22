@@ -1,31 +1,9 @@
-'use server'; // This is important to enable the server-side logic
+'use server'
 
-import type { Booking, Property, Room } from '@prisma/client';
 import { Suspense } from 'react';
 import clsx from 'clsx';
-import { db } from '@/server/db';
 import BookingCard from '@/components/BookingCard';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
-
-// Server Action to fetch bookings
-export async function getBookings(): Promise<(Booking & { roomsBooked: Room[] })[]> {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        throw new Error("User not authenticated");
-    }
-
-    const userId = session.user._id;
-
-    const bookings = await db.booking.findMany({
-        where: { userId },
-        include: {
-            roomsBooked: true, // Only rooms, no property
-        },
-    });
-
-    return bookings;
-}
+import { getBookings } from '@/app/actions';
 
 const MyBooking = () => {
     return (

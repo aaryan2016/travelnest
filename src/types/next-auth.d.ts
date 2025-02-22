@@ -1,4 +1,5 @@
 import 'next-auth'
+import { type DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
     interface User {
@@ -6,7 +7,8 @@ declare module 'next-auth' {
         username?: string;
     }
 
-    interface Session {
+    interface Session extends DefaultSession {
+        expires: string;
         user: {
             _id?: string;
             username?: string;

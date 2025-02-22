@@ -3,9 +3,9 @@
 import { db } from "@/server/db";
 import bcrypt from "bcryptjs";
 import type { propertyData } from "./(main)/hotels/[hotelId]/page";
-import type { propertiesData } from "./(main)/hotels/page";
+import type { PropertiesData } from "./(main)/hotels/page";
 import type { BookingState } from "@/components/PaymentForm";
-import { BookingStatus, PaymentStatus } from "@prisma/client"; // Enum imports
+import { type Booking, BookingStatus, PaymentStatus, type Room } from "@prisma/client"; // Enum imports
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/options";
 
@@ -16,9 +16,9 @@ interface RegisterState {
 }
 
 export async function registerUser(prevState: RegisterState, formData: FormData): Promise<RegisterState> {
-    const email = formData.get("email")?.toString().trim() || "";
-    const username = formData.get("username")?.toString().trim() || "";
-    const password = formData.get("password")?.toString() || "";
+    const email = formData.get("email")?.toString().trim() ?? "";
+    const username = formData.get("username")?.toString().trim() ?? "";
+    const password = formData.get("password")?.toString() ?? "";
 
     const errors: RegisterState["errors"] = {};
 
@@ -26,7 +26,7 @@ export async function registerUser(prevState: RegisterState, formData: FormData)
     if (!username || username.length < 3) {
         errors.username = "Username must be at least 3 characters long.";
     }
-    if (!email || !email.includes("@")) {
+    if (!email?.includes("@")) {
         errors.email = "Please enter a valid email address.";
     }
     if (!password || password.length < 6) {
@@ -70,14 +70,14 @@ export async function registerUser(prevState: RegisterState, formData: FormData)
     }
 }
 
-export const fetchProperties = async ({ destination }: { destination: string }): Promise<propertiesData[] | null> => {
+export const fetchProperties = async ({ destination }: { destination: string }): Promise<PropertiesData[] | null> => {
     const res = await db.property.findMany({
         where: {
             city: { contains: destination, mode: 'insensitive' },
         },
         select: {
-            id: true, 
-            title: true, 
+            id: true,
+            title: true,
             propertyType: true,
             rooms: { select: { id: true, price: true } }
         }
@@ -120,17 +120,17 @@ export const fetchPropertyData = async ({ id }: { id: string }): Promise<propert
 }
 
 export async function createBooking(prevState: BookingState, formData: FormData): Promise<BookingState> {
-    console.log({formData,})
-    const cardNumber = formData.get("cardNumber")?.toString() || "";
-    const expiryDate = formData.get("expiryDate")?.toString() || "";
-    const checkInDate = formData.get("checkInDate")?.toString() || "";
-    const checkOutDate = formData.get("checkOutDate")?.toString() || "";
-    const totalPrice = formData.get("totalPrice")?.toString() || "0";
-    const cvv = formData.get("cvv")?.toString() || "";
-    const selectedRooms = JSON.parse(formData.get("selectedRooms")?.toString() || "[]"); // Make sure to send selectedRooms as a JSON string
+    console.log({ formData, })
+    const cardNumber = formData.get("cardNumber")?.toString() ?? "";
+    const expiryDate = formData.get("expiryDate")?.toString() ?? "";
+    const checkInDate = formData.get("checkInDate")?.toString() ?? "";
+    const checkOutDate = formData.get("checkOutDate")?.toString() ?? "";
+    const totalPrice = formData.get("totalPrice")?.toString() ?? "0";
+    const cvv = formData.get("cvv")?.toString() ?? "";
+    const selectedRooms = JSON.parse(formData.get("selectedRooms")?.toString() ?? "[]") as Room[]; // Make sure to send selectedRooms as a JSON string
 
     // Luhn Algorithm to validate credit card numbers
-    const validateCardNumber = (cardNumber: string) => {
+    const validateCardNumber = (cardNumber: string): boolean => {
         const regex = /^\d{16}$/;
         if (!regex.test(cardNumber)) return false;
         let sum = 0;
@@ -180,10 +180,10 @@ export async function createBooking(prevState: BookingState, formData: FormData)
 
     try {
         // Create a new booking entry in the database
-        const newBooking = await db.booking.create({
+        await db.booking.create({
             data: {
                 bookedByUser: {
-                    connect: { email: userMail }, // Link the user with the booking
+                    connect: { email: userMail ?? "" }, // Link the user with the booking
                 },
                 checkInDate: new Date(checkInDate), // Example check-in date
                 checkOutDate: new Date(checkOutDate), // Example check-out date
@@ -202,4 +202,24 @@ export async function createBooking(prevState: BookingState, formData: FormData)
         console.error("Error during booking:", error);
         return { message: "An error occurred. Please try again.", success: false };
     }
+}
+
+// Server Action to fetch bookings
+export async function getBookings(): Promise<(Booking & { roomsBooked: Room[] })[]> {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?._id) {
+        throw new Error('Unauthorized - Please login first');
+    }
+
+    const userId = session.user._id;
+
+    const bookings = await db.booking.findMany({
+        where: { userId },
+        include: {
+            roomsBooked: true, // Only rooms, no property
+        },
+    });
+
+    return bookings;
 }

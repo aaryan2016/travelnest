@@ -45,7 +45,7 @@ import { db } from "./db";
 // }
 
 export async function createAllAction() {
-    const data = await db.user.create({
+    await db.user.create({
         data: {
             username: 'Third User Name',
             email: 'thirduser@example.com',

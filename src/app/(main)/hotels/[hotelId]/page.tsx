@@ -1,13 +1,12 @@
 import { fetchPropertyData } from '@/app/actions'
 import Footer from '@/components/Footer'
-import HotelRoom from '@/components/HotelRoom'
 import HotelRoomWrapper from '@/components/HotelRoomWrapper'
 import MailList from '@/components/MailList'
-import Navbar from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+import Image from 'next/image'
 
 export interface propertyAmenities {
     id: string,
@@ -92,7 +91,13 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
                         <div className="hotelImages flex flex-wrap justify-between">
                             {photos.map((photo) => (
                                 <div className="hotelImgWrapper w-1/3 p-1" key={photo.id}>
-                                    <img src={photo.src} alt="" className="hotelImg w-full object-cover h-60 m-[2px] rounded-lg" />
+                                    <Image
+                                        src={photo.src}
+                                        alt=""
+                                        width={400}
+                                        height={240}
+                                        className="hotelImg w-full object-cover h-60 m-[2px] rounded-lg"
+                                    />
                                 </div>
                             ))}
                         </div>
@@ -122,7 +127,13 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
                                 {propertyAmenities?.map(amenity => (
                                     <div key={amenity.id} className='flex font-semibold items-center mr-9'>
                                         {amenity.icon && (
-                                            <img className="h-8 mr-1" src={amenity.icon} alt={amenity.name} />
+                                            <Image
+                                                src={amenity.icon}
+                                                alt={amenity.name}
+                                                width={32}
+                                                height={32}
+                                                className="h-8 mr-1"
+                                            />
                                         )}
                                         <div>{amenity.name}</div>
                                     </div>

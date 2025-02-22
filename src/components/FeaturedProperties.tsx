@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from './ui/button'
+import Image from 'next/image'
 
 interface featuredHotel {
     hotelName: string,
@@ -44,9 +45,11 @@ function FeaturedProperties() {
         <div className='fp w-full max-w-screen-lg flex justify-between gap-5'>
             {featuredHotels.map(fh => (
                 <div key={fh.hotelName} className="fpItem flex-1 flex flex-col gap-[10]">
-                    <img
+                    <Image
                         src={fh.img}
                         alt=""
+                        width={300}
+                        height={200}
                         className="fpImg w-full rounded-xl"
                     />
                     <span className="fpName font-bold">{fh.hotelName}</span>

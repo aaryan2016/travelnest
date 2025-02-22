@@ -1,15 +1,17 @@
 import React from 'react'
-import type { propertiesData } from '@/app/(main)/hotels/page'
+import type { PropertiesData } from '@/app/(main)/hotels/page'
 import Link from 'next/link'
-
-function SearchItem({ id, title, propertyType, rooms }: propertiesData) {
+import Image from 'next/image'
+function SearchItem({ id, title, propertyType, rooms }: PropertiesData) {
     const lowestPrice = Math.min(...rooms.map(room => room.price));
     return (
         <div className='searchItem border-[1px] border-solid border-gray-300 p-3 rounded flex justify-between gap-5 mb-5'>
-            <img
+            <Image
                 className='siImg w-52 h-52 object-cover'
                 src="https://cms.interiorcompany.com/wp-content/uploads/2024/01/creating-distinct-zones-with-flooring-studio-apartment-design.jpg"
                 alt="studio_apartment"
+                width={100}
+                height={100}
             />
             <div className="siDesc flex flex-col gap-2 flex-[2_2_0%]">
                 <Link href={`/hotels/${id}`}>

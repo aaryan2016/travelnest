@@ -1,10 +1,9 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faBed,
-    faCalendarDays,
     faPerson
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from './ui/button';
@@ -21,7 +20,7 @@ export type options = {
     rooms: number;
 }
 
-function HeaderSearch() {
+function HeaderSearchContent() {
     const [options, setOptions] = useState<options>({
         adult: 2,
         kids: 0,
@@ -48,11 +47,12 @@ function HeaderSearch() {
 
     const searchParams = useSearchParams()
     const pathname = usePathname()
-    const { replace } = useRouter()
+    const router = useRouter()
+    const replace = (url: string) => router.replace(url)
 
     const handleSearch = () => {
         // Prepare query parameters
-        const query: { [key: string]: string | undefined } = {
+        const query: Record<string, string | undefined> = {
             destination,
             from: date?.from?.toISOString().slice(0, 10), // Convert date to string
             to: date?.to?.toISOString().slice(0, 10),     // Convert date to string
@@ -62,12 +62,12 @@ function HeaderSearch() {
         };
 
         const params = new URLSearchParams(searchParams);
-        (query.destination) ? params.set("destination", query.destination) : params.delete("destination");
-        (query.from) ? params.set("from", query.from) : params.delete("from");
-        (query.to) ? params.set("to", query.to) : params.delete("to");
-        (query.adult) ? params.set("adult", query.adult) : params.delete("adult");
-        (query.kids) ? params.set("kids", query.kids) : params.delete("kids");
-        (query.rooms) ? params.set("rooms", query.rooms) : params.delete("rooms");
+        void ((query.destination) ? params.set("destination", query.destination) : params.delete("destination"));
+        void ((query.from) ? params.set("from", query.from) : params.delete("from"));
+        void ((query.to) ? params.set("to", query.to) : params.delete("to"));
+        void ((query.adult) ? params.set("adult", query.adult) : params.delete("adult"));
+        void ((query.kids) ? params.set("kids", query.kids) : params.delete("kids"));
+        void ((query.rooms) ? params.set("rooms", query.rooms) : params.delete("rooms"));
 
         replace(`${pathname}hotels?${params}`)
     }
@@ -115,4 +115,10 @@ function HeaderSearch() {
     )
 }
 
-export default HeaderSearch
+export default function HeaderSearch() {
+    return (
+        <Suspense fallback={<div>Loading search parameters...</div>}>
+            <HeaderSearchContent />
+        </Suspense>
+    );
+}

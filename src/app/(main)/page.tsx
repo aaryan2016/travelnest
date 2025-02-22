@@ -3,7 +3,7 @@ import FeaturedProperties from "@/components/FeaturedProperties";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import MailList from "@/components/MailList";
-import Navbar from "@/components/Navbar";
+// import Navbar from "@/components/Navbar";
 import PropertyList from "@/components/PropertyList";
 
 export default function HomePage() {

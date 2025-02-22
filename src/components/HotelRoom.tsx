@@ -208,6 +208,7 @@ import type React from 'react'
 import { useState } from 'react'
 import { Button } from './ui/button'
 import type { selectedRoomsData } from './HotelRoomWrapper'
+import Image from 'next/image'
 
 const capacityIcon = "https://cdn-icons-png.flaticon.com/512/456/456212.png"
 
@@ -220,7 +221,7 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
     const capacityArray = Array(props?.capacity).fill(capacityIcon)
     const [selectedRooms, setSelectedRooms] = useState(1)
     const [showRoomControls, setShowRoomControls] = useState(false) // Controls visibility of increase/decrease buttons
-    const [pricePerNight, setPricePerNight] = useState<number>(Number(props?.price.toFixed(0)) || 0)
+    const pricePerNight = Number(props?.price.toFixed(0)) || 0;
 
     const maxRooms = props?.quantity ?? 0
 
@@ -242,12 +243,12 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
         } else {
             // If room doesn't exist, add it to the selection
             setSelectedRoomsData([...selectedRoomsData, {
-                id: props?.id || "",
-                description: props?.description || "",
-                title: props?.title || "",
+                id: props?.id ?? "",
+                description: props?.description ?? "",
+                title: props?.title ?? "",
                 quantity: newSelectedRooms,
                 price: pricePerNight * newSelectedRooms * numberOfNights,
-                roomType: props?.title || ""
+                roomType: props?.title ?? ""
             }])
         }
     }
@@ -289,8 +290,14 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
                 <div className="text-base font-medium mt-6">Number of Guests</div>
                 <div className='flex gap-3 my-3'>
                     {capacityArray.map((icon, i) => (
-                        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                        <img key={i} className="w-5" src={capacityIcon} alt="" />
+                        <Image
+                            key={i}
+                            className="w-5"
+                            src={capacityIcon}
+                            alt="Capacity icon"
+                            width={20}
+                            height={20}
+                        />
                     ))}
                 </div>
                 <div className='mt-2'>Available Rooms: {maxRooms}</div>
@@ -309,7 +316,6 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
                 <div className='flex flex-col items-center my-3'>
                     <div className='flex'>
                         <div className='font-semibold text-lg'>Price per Night: $</div>
-                        {/* <div className='flex text-xl font-bold'>{selectedRooms === 0 ? '0' : price}</div> */}
                         <div className='flex text-xl font-bold'>{Number(props?.price.toFixed(0))}</div>
                     </div>
                     <div className="flex flex-col gap-4 text-green-600 text-sm mt-8 ml-3">

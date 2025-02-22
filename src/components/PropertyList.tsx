@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 
 interface property {
@@ -38,10 +39,12 @@ function PropertyList() {
             <div className='pList w-full max-w-screen-lg flex justify-between gap-5'>
                 {properties.map(property => (
                     <div key={property.propertyType} className="pListItem flex-1 rounded-xl overflow-hidden cursor-pointer">
-                        <img
+                        <Image
                             className='pListImg w-full h-40 object-cover'
                             src={property.img}
                             alt=""
+                            width={100}
+                            height={100}
                         />
                         <div className="pListTitles">
                             <h1 className='text-xl font-bold'>{property.propertyType}</h1>

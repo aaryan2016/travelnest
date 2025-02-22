@@ -60,7 +60,6 @@ interface BookingCardProps {
 
 const BookingCard: FC<BookingCardProps> = ({ booking }) => {
     const {
-        id,
         checkInDate,
         checkOutDate,
         noOfGuests,

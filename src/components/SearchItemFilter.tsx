@@ -1,7 +1,7 @@
 "use client"
 import type React from 'react'
-import { useState } from 'react'
-import type { searchParams } from '@/app/(main)/hotels/page'
+import { useState, Suspense } from 'react'
+import type { SearchParams } from '@/app/(main)/hotels/page'
 import { Button } from './ui/button'
 import type { DateRange } from 'react-day-picker'
 import { DatePickerWithRange } from './ui/DatePickerWithRange'
@@ -13,8 +13,7 @@ interface filterOptions {
     rooms: string,
 }
 
-function SearchItemFilter({ destination, from, to, adult, kids, rooms }: searchParams) {
-
+function FilterContent({ destination, from, to, adult, kids, rooms }: SearchParams) {
     const [filterDestination, setFilterDestination] = useState<string>(destination)
     const [filterDate, setFilterDate] = useState<DateRange | undefined>({
         from: new Date(from),
@@ -38,11 +37,11 @@ function SearchItemFilter({ destination, from, to, adult, kids, rooms }: searchP
 
     const searchParams = useSearchParams()
     const pathname = usePathname()
-    const { replace } = useRouter()
+    const router = useRouter()
 
     const handleSearch = () => {
         // Prepare query parameters
-        const query: { [key: string]: string | undefined } = {
+        const query: Record<string, string | undefined> = {
             destination: filterDestination,
             from: filterDate?.from?.toISOString().slice(0, 10), // Convert date to string
             to: filterDate?.to?.toISOString().slice(0, 10),     // Convert date to string
@@ -54,14 +53,14 @@ function SearchItemFilter({ destination, from, to, adult, kids, rooms }: searchP
         console.log("filter query: ", query)
 
         const params = new URLSearchParams(searchParams);
-        (query.destination) ? params.set("destination", query.destination) : params.delete("destination");
-        (query.from) ? params.set("from", query.from) : params.delete("from");
-        (query.to) ? params.set("to", query.to) : params.delete("to");
-        (query.adult) ? params.set("adult", query.adult) : params.delete("adult");
-        (query.kids) ? params.set("kids", query.kids) : params.delete("kids");
-        (query.rooms) ? params.set("rooms", query.rooms) : params.delete("rooms");
+        void ((query.destination) ? params.set("destination", query.destination) : params.delete("destination"));
+        void ((query.from) ? params.set("from", query.from) : params.delete("from"));
+        void ((query.to) ? params.set("to", query.to) : params.delete("to"));
+        void ((query.adult) ? params.set("adult", query.adult) : params.delete("adult"));
+        void ((query.kids) ? params.set("kids", query.kids) : params.delete("kids"));
+        void ((query.rooms) ? params.set("rooms", query.rooms) : params.delete("rooms"));
 
-        replace(`${pathname}?${params}`)
+        router.replace(`${pathname}?${params}`)
     }
 
     return (
@@ -153,4 +152,14 @@ function SearchItemFilter({ destination, from, to, adult, kids, rooms }: searchP
     )
 }
 
-export default SearchItemFilter
+export default function SearchItemFilter(props: SearchParams) {
+    return (
+        <Suspense fallback={
+            <div className="listSearch flex-1 p-3 rounded-xl sticky h-max top-3 bg-[#febb02]">
+                Loading...
+            </div>
+        }>
+            <FilterContent {...props} />
+        </Suspense>
+    );
+}

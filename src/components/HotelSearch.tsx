@@ -21,14 +21,15 @@ const formSchema = z.object({
         message: "destination must be at least 2 characters.",
     }),
     dateRange: z.string(),
-    
+
 })
 
 export default function HotelSearch() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            destination: "",
+            dateRange: "",
         },
     })
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -42,15 +43,15 @@ export default function HotelSearch() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                     control={form.control}
-                    name="username"
+                    name="destination"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Username</FormLabel>
+                            <FormLabel>Destination</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input placeholder="Enter the city you want to search for." {...field} />
                             </FormControl>
                             <FormDescription>
-                                This is your public display name.
+                                Enter the city you want to search for.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>

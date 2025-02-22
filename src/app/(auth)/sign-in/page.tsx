@@ -100,7 +100,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -116,6 +116,23 @@ type SignInFormInputs = {
     password: string;
 };
 
+// Component to handle search params
+function SearchParamsHandler({
+    onParamsReady
+}: {
+    onParamsReady: (params: { callbackUrl: string; errorMsg: string }) => void
+}) {
+    const searchParams = useSearchParams();
+    const callbackUrl = decodeURIComponent(searchParams.get('callbackUrl') ?? '/');
+    const errorMsg = searchParams.get('error') ? 'Invalid credentials. Please try again.' : '';
+
+    useEffect(() => {
+        onParamsReady({ callbackUrl, errorMsg });
+    }, [callbackUrl, errorMsg, onParamsReady]);
+
+    return null;
+}
+
 export default function SignInPage() {
     const {
         register,
@@ -124,13 +141,8 @@ export default function SignInPage() {
     } = useForm<SignInFormInputs>(); // Ensure the type is passed to useForm
 
     const [loading, setLoading] = useState(false);
-    const searchParams = useSearchParams();
     const router = useRouter();
-
-    // Get the callbackUrl from the query params
-    // const callbackUrl = searchParams.get('callbackUrl') || '/';
-    const callbackUrl = decodeURIComponent(searchParams.get('callbackUrl') || '/');
-    const errorMsg = searchParams.get('error') ? 'Invalid credentials. Please try again.' : '';
+    const [params, setParams] = useState({ callbackUrl: '/', errorMsg: '' });
 
     const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
         setLoading(true);
@@ -141,21 +153,24 @@ export default function SignInPage() {
         });
         setLoading(false);
 
-        if (result?.error) {
+        if (result && 'error' in result) {
             router.push("/sign-in?error=true");
         } else {
-            router.push(callbackUrl);
+            router.push(params.callbackUrl);
         }
     };
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-blue-100 p-4">
+            <Suspense fallback={<div>Loading...</div>}>
+                <SearchParamsHandler onParamsReady={setParams} />
+            </Suspense>
             <Card className="w-full max-w-md shadow-lg rounded-xl bg-white border border-gray-200">
                 <CardHeader className="bg-blue-600 text-white p-4 rounded-t-xl">
                     <CardTitle className="text-center text-2xl font-bold">Sign in to your account</CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
-                    {errorMsg && <p className="mb-4 text-center text-red-500">{errorMsg}</p>}
+                    {params.errorMsg && <p className="mb-4 text-center text-red-500">{params.errorMsg}</p>}
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div>
                             <Label htmlFor="identifier" className="text-gray-700 font-semibold">Email or Username</Label>
@@ -171,7 +186,7 @@ export default function SignInPage() {
                             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Sign In'}
                         </Button>
                     </form>
-                    <p className="text-center text-gray-600 mt-4">Don't have an account? <a href="/sign-up" className="text-blue-600 hover:underline">Sign up</a></p>
+                    <p className="text-center text-gray-600 mt-4">Don&apos;t have an account? <a href="/sign-up" className="text-blue-600 hover:underline">Sign up</a></p>
                 </CardContent>
             </Card>
         </div>
