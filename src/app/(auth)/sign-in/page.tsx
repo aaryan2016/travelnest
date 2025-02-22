@@ -162,13 +162,16 @@ export default function SignInPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-blue-100 p-4">
-            <Suspense fallback={<div>Loading...</div>}>
+            {/* <Suspense fallback={<div>Loading...</div>}>
                 <SearchParamsHandler onParamsReady={setParams} />
-            </Suspense>
+            </Suspense> */}
             <Card className="w-full max-w-md shadow-lg rounded-xl bg-white border border-gray-200">
                 <CardHeader className="bg-blue-600 text-white p-4 rounded-t-xl">
                     <CardTitle className="text-center text-2xl font-bold">Sign in to your account</CardTitle>
                 </CardHeader>
+                <Suspense fallback={<div>Loading...</div>}>
+                    <SearchParamsHandler onParamsReady={setParams} />
+                </Suspense>
                 <CardContent className="p-6">
                     {params.errorMsg && <p className="mb-4 text-center text-red-500">{params.errorMsg}</p>}
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
