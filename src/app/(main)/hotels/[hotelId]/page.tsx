@@ -45,7 +45,7 @@ export interface HotelPageSearchParams {
     // to: string;
 }
 
-export default async function page({ params, searchParams }: { params: Promise<HotelPageSearchParams>, searchParams: { from: string; to: string; } }) {
+export default async function page({ params, searchParams }: { params: Promise<HotelPageSearchParams>, searchParams: Promise<{ from: string; to: string; }> }) {
     const photos = [
         {
             id: 1,
@@ -74,7 +74,7 @@ export default async function page({ params, searchParams }: { params: Promise<H
     ]
     try {
         const hotelId: string = (await params).hotelId;
-        const { from, to } = searchParams
+        const { from, to } = await searchParams
 
         const propertyData: propertyData | null = await fetchPropertyData({ id: hotelId })
         const propertyAmenities: propertyAmenities[] | undefined = propertyData?.ameneties;
