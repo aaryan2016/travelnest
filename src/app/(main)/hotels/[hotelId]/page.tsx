@@ -39,7 +39,13 @@ export interface propertyRooms {
     }[]
 }
 
-export default async function page({ params }: { params: Promise<{ hotelId: string }> }) {
+export interface HotelPageSearchParams {
+    hotelId: string;
+    from: string;
+    to: string;
+}
+
+export default async function page({ params }: { params: Promise<HotelPageSearchParams> }) {
     const photos = [
         {
             id: 1,
@@ -67,7 +73,10 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
         }
     ]
     try {
-        const hotelId: string = (await params).hotelId
+        const { hotelId, from, to } = await params
+        // const hotelId: string = (await params).hotelId;
+        // const from: string = (await params).from;
+        // const to: string = (await params).to;
         const propertyData: propertyData | null = await fetchPropertyData({ id: hotelId })
         const propertyAmenities: propertyAmenities[] | undefined = propertyData?.ameneties;
         const propertyRooms: propertyRooms[] | undefined = propertyData?.rooms;
@@ -152,7 +161,8 @@ export default async function page({ params }: { params: Promise<{ hotelId: stri
                                 <p>No available rooms.</p> // Handle case with no rooms available
                             )}
                         </div> */}
-                        <HotelRoomWrapper propertyName={propertyData?.title} propertyRooms={propertyRooms} from="2025-02-10" to="2025-02-20" /> {/* Example dates */}
+                        {/* <HotelRoomWrapper propertyName={propertyData?.title} propertyRooms={propertyRooms} from="2025-02-10" to="2025-02-20" /> Example dates */}
+                        <HotelRoomWrapper propertyName={propertyData?.title} propertyRooms={propertyRooms} from={from} to={to} /> {/* Example dates */}
                     </div>
                     <MailList />
                     <Footer />

@@ -65,6 +65,8 @@ export default async function Page({
                                     title={property.title}
                                     propertyType={property.propertyType}
                                     rooms={property.rooms}
+                                    from={from}
+                                    to={to}
                                 />
                             ))
                         ) : (
