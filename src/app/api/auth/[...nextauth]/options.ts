@@ -2,7 +2,7 @@ import type { NextAuthOptions, Session, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs"
 import { db } from "@/server/db";
-import { type JWT } from "next-auth/jwt";
+import type { JWT } from "next-auth/jwt";
 
 // Define a type for the session
 interface CustomSession {
@@ -82,8 +82,9 @@ export const authOptions: NextAuthOptions = {
                 expires: session.expires, // Add the missing 'expires' property
                 user: {
                     ...session.user,
+                    // biome-ignore lint/style/noNonNullAssertion: <explanation>
                     id: token._id!,
-                    username: token.username!
+                    username: token.username,
                 }
             };
         }
@@ -94,5 +95,5 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt"
     },
-    secret: process.env.AUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
 }
