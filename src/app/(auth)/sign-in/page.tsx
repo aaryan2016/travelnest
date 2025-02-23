@@ -162,7 +162,7 @@ export default function SignInPage() {
 
         if (result?.status !== 200) {
             router.push(`/sign-in?error=true&callbackUrl=${callbackUrl}`);
-        } else if (result) {
+        } else if (result.ok) {
             router.push(callbackUrl);
         } else {
             console.log("else callbackUrl: ", callbackUrl)

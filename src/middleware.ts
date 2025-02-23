@@ -11,7 +11,7 @@ export async function middleware(request: NextRequest) {
     // console.log("middleware callbackUrl: ", callbackUrl)
     // console.log("middleware urlSearchParams: ", url.searchParams.toString())
     const actualCallbackUrl = url.searchParams.toString().startsWith("callbackUrl") ? callbackUrl : "/";
-    console.log("middleware actualCallbackUrl: ", actualCallbackUrl)
+    // console.log("middleware actualCallbackUrl: ", actualCallbackUrl)
 
     // If the user is not authenticated and tries to access a protected route like /hotels
     if (!token && url.pathname.startsWith('/hotels/')) {

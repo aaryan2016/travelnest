@@ -25,7 +25,8 @@ export default function HotelRoomWrapper({ propertyName, propertyRooms, from, to
 
     console.log("selectedRoomsData", selectedRoomsData)
 
-    const numberOfNights = (new Date(to).getTime() - new Date(from).getTime()) / (1000 * 3600 * 24) // Calculate number of nights
+    const numberOfNights = Number((new Date(to).getTime() - new Date(from).getTime()) / (1000 * 3600 * 24)) // Calculate number of nights
+    console.log("HotelRoomWrapper numberOfNights: ", numberOfNights)
 
     const totalPrice = selectedRoomsData.reduce((total, room) => total + room.price, 0)
     const totalRooms = selectedRoomsData.reduce((total, room) => total + room.quantity, 0)

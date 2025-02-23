@@ -4,6 +4,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 function SearchItem({ id, title, propertyType, rooms, from, to }: PropertiesData & { from: string; to: string }) {
     const lowestPrice = Math.min(...rooms.map(room => room.price));
+    console.log("SearchItem from: ", from)
+    console.log("SearchItem to: ", to)
     return (
         <div className='searchItem border-[1px] border-solid border-gray-300 p-3 rounded flex justify-between gap-5 mb-5'>
             <Image
@@ -14,7 +16,7 @@ function SearchItem({ id, title, propertyType, rooms, from, to }: PropertiesData
                 height={100}
             />
             <div className="siDesc flex flex-col gap-2 flex-[2_2_0%]">
-                <Link href={`/hotels/${id}`}>
+                <Link href={`/hotels/${id}?from=${from}&to=${to}`}>
                     <h1 className="siTitle text-xl font-extrabold text-blue-800">{title}</h1>
                 </Link>
                 <span className="siDistance text-xs">500m from center</span>
@@ -32,7 +34,7 @@ function SearchItem({ id, title, propertyType, rooms, from, to }: PropertiesData
                 <div className="siDetailsTexts text-right flex flex-col gap-1">
                     <span className="siPrice text-2xl">${lowestPrice.toFixed(0)}</span>
                     <span className="siTaxOp text-xs text-gray-500">Includes taxes and fees</span>
-                    <Link className='siCheckButton font-semibold bg-blue-950 text-white rounded w-full p-2 mt-2' href={`/hotels/${id}&from=${from}&to=${to}`}>
+                    <Link className='siCheckButton font-semibold bg-blue-950 text-white rounded w-full p-2 mt-2' href={`/hotels/${id}?from=${from}&to=${to}`}>
                         {/* <Button
                             className='siCheckButton font-semibold'> */}
                         See Availibility
