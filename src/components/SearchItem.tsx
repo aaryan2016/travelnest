@@ -2,7 +2,7 @@ import React from 'react'
 import type { PropertiesData } from '@/app/(main)/hotels/page'
 import Link from 'next/link'
 import Image from 'next/image'
-function SearchItem({ id, title, propertyType, rooms }: PropertiesData) {
+function SearchItem({ id, title, propertyType, rooms, from, to }: PropertiesData & { from: string; to: string }) {
     const lowestPrice = Math.min(...rooms.map(room => room.price));
     return (
         <div className='searchItem border-[1px] border-solid border-gray-300 p-3 rounded flex justify-between gap-5 mb-5'>
@@ -32,7 +32,7 @@ function SearchItem({ id, title, propertyType, rooms }: PropertiesData) {
                 <div className="siDetailsTexts text-right flex flex-col gap-1">
                     <span className="siPrice text-2xl">${lowestPrice.toFixed(0)}</span>
                     <span className="siTaxOp text-xs text-gray-500">Includes taxes and fees</span>
-                    <Link className='siCheckButton font-semibold bg-blue-950 text-white rounded w-full p-2 mt-2' href={`/hotels/${id}`}>
+                    <Link className='siCheckButton font-semibold bg-blue-950 text-white rounded w-full p-2 mt-2' href={`/hotels/${id}&from=${from}&to=${to}`}>
                         {/* <Button
                             className='siCheckButton font-semibold'> */}
                         See Availibility
