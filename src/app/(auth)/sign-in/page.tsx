@@ -124,6 +124,7 @@ function SearchParamsHandler({
 }) {
     const searchParams = useSearchParams();
     const callbackUrl = decodeURIComponent(searchParams.get('callbackUrl') ?? '/');
+    // console.log("paramsCallBackURL: ", callbackUrl)
     const errorMsg = searchParams.get('error') ? 'Invalid credentials. Please try again.' : '';
 
     useEffect(() => {
@@ -146,17 +147,26 @@ export default function SignInPage() {
 
     const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
         setLoading(true);
+        // Get the current callbackUrl from search params
+        const callbackUrl = params.callbackUrl || '/';  // fallback to '/' if no callbackUrl
+        // console.log("onSubmit callbackUrl: ", callbackUrl)
+
         const result = await signIn('credentials', {
             identifier: data.identifier,
             password: data.password,
             redirect: false,
+            callbackUrl: callbackUrl,
         });
         setLoading(false);
+        // console.log("result: ", result)
 
-        if (result && 'error' in result) {
-            router.push("/sign-in?error=true");
+        if (result?.status !== 200) {
+            router.push(`/sign-in?error=true&callbackUrl=${callbackUrl}`);
+        } else if (result) {
+            router.push(callbackUrl);
         } else {
-            router.push(params.callbackUrl);
+            console.log("else callbackUrl: ", callbackUrl)
+            router.push(callbackUrl);
         }
     };
 

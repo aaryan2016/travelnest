@@ -5,6 +5,13 @@ import { getToken } from "next-auth/jwt"
 export async function middleware(request: NextRequest) {
     const token = await getToken({ req: request })
     const url = request.nextUrl
+    const urlSearchParams = request.nextUrl.searchParams.toString().split("=")[1] ?? ""
+    const callbackUrl = decodeURIComponent(urlSearchParams)
+    // console.log("middleware url: ", url)
+    // console.log("middleware callbackUrl: ", callbackUrl)
+    // console.log("middleware urlSearchParams: ", url.searchParams.toString())
+    const actualCallbackUrl = url.searchParams.toString().startsWith("callbackUrl") ? callbackUrl : "/";
+    console.log("middleware actualCallbackUrl: ", actualCallbackUrl)
 
     // If the user is not authenticated and tries to access a protected route like /hotels
     if (!token && url.pathname.startsWith('/hotels/')) {
@@ -20,7 +27,7 @@ export async function middleware(request: NextRequest) {
             url.pathname.startsWith('/sign-up')
         )
     ) {
-        return NextResponse.redirect(new URL('/', request.url))
+        return NextResponse.redirect(new URL(actualCallbackUrl, request.url))
     }
 
     // return NextResponse.redirect(new URL('/sign-in', request.url))
