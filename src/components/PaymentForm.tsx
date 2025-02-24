@@ -1,11 +1,12 @@
 "use client"
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { createBooking } from '@/app/actions';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
-// import { Loader2 } from 'lucide-react';
 import type { selectedRoomsData } from './HotelRoomWrapper';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export interface BookingState {
     message: string;
@@ -38,7 +39,20 @@ const PaymentForm = ({
     const [expiryDate, setExpiryDate] = useState('');
     const [cvv, setCvv] = useState('');
     // const [isProcessing, setIsProcessing] = useState(false);
-    const [state, formAction] = useActionState(createBooking, initialState);
+    const [state, formAction, isPending] = useActionState(createBooking, initialState);
+    const router = useRouter();
+
+    useEffect(() => {
+        if (state.success) {
+            // Delay redirection by 0.5 second after successful booking
+            const timer = setTimeout(() => {
+                router.push('/my-booking'); // Redirect to /my-booking page
+            }, 500);
+
+            // Clear the timer if the component is unmounted or booking fails
+            return () => clearTimeout(timer);
+        }
+    }, [state.success, router])
 
     return (
         <div className="flex min-h-fit p-4">
@@ -112,11 +126,11 @@ const PaymentForm = ({
                 </div>
                 <Button
                     type="submit"
-                    // disabled={isProcessing}
+                    disabled={isPending}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-md shadow-md"
                 >
                     {/* {isProcessing ? <Loader2 className="animate-spin" /> : "Submit Booking"} */}
-                    Submit Booking
+                    {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Submit Booking'}
                 </Button>
                 {state.message && (
                     <p className={`text-sm text-center mt-2 ${state.success ? "text-green-500" : "text-red-500"}`}>

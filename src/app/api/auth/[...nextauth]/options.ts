@@ -6,13 +6,13 @@ import type { JWT } from "next-auth/jwt";
 
 // Define a type for the session
 interface CustomSession {
-    // user: {
-    //     _id: string;
-    //     username: string;
-    //     email?: string | null;
-    //     name?: string | null;
-    // };
-    user: User;
+    user: {
+        _id: string;
+        username: string;
+        email?: string | null;
+        name?: string | null;
+    };
+    // user: User;
     expires: string;
 }
 
@@ -55,7 +55,13 @@ export const authOptions: NextAuthOptions = {
                         throw new Error('Invalid password');
                     }
 
-                    return user;
+                    // return user;
+                    return {
+                        _id: user.id,
+                        id: user.id,
+                        username: user.username,
+                        email: user.email
+                    }
                 } catch (error) {
                     if (error instanceof Error) {
                         throw new Error(error.message);
@@ -83,8 +89,9 @@ export const authOptions: NextAuthOptions = {
                 user: {
                     ...session.user,
                     // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                    id: token._id!,
-                    username: token.username,
+                    _id: token._id!,
+                    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+                    username: token.username!,
                 }
             };
         }

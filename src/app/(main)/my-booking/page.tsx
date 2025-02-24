@@ -26,6 +26,15 @@ const MyBooking = () => {
 const BookingsList = async () => {
     const bookings = await getBookings(); // Server Action fetches bookings
 
+    // Check if the user is not logged in (bookings is null)
+    if (bookings === null) {
+        return (
+            <div className="flex justify-center mt-5">
+                <p className="text-xl text-gray-600">Please log in to view your bookings.</p>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-wrap">
             {bookings.length > 0 ? (

@@ -46,7 +46,7 @@ const BookingSummary = ({ selectedRooms, totalPrice, numberOfNights, from, to, p
                             <p className="text-sm text-gray-500">{room.description}</p>
                         </div>
                         <div className="text-gray-600">
-                            {room.quantity} x ${room.price} = ${(room.quantity * room.price).toFixed(2)}
+                            {room.quantity} x $ {room.unitPrice} x {numberOfNights} nights = $ {(room.quantity * room.unitPrice * numberOfNights).toFixed(2)}
                         </div>
                     </div>
                 ))}
@@ -55,7 +55,7 @@ const BookingSummary = ({ selectedRooms, totalPrice, numberOfNights, from, to, p
             {/* Total Price */}
             <div className="mt-6 border-t pt-4 flex justify-between">
                 <div className="text-lg font-semibold text-gray-800">Total Price</div>
-                <div className="text-xl font-bold text-blue-600">${totalPrice.toFixed(2)}</div>
+                <div className="text-xl font-bold text-blue-600">${(totalPrice * numberOfNights).toFixed(2)}</div>
             </div>
         </div>
     );

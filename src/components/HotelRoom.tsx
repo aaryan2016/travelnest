@@ -237,7 +237,8 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
             // Now, safely update the quantity and price
             if (updatedRooms[existingRoomIndex]) {
                 updatedRooms[existingRoomIndex].quantity = newSelectedRooms
-                updatedRooms[existingRoomIndex].price = pricePerNight * newSelectedRooms * numberOfNights
+                updatedRooms[existingRoomIndex].unitPrice = pricePerNight
+                updatedRooms[existingRoomIndex].totalPrice = pricePerNight * newSelectedRooms * numberOfNights
                 setSelectedRoomsData(updatedRooms)
             }
         } else {
@@ -247,7 +248,8 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
                 description: props?.description ?? "",
                 title: props?.title ?? "",
                 quantity: newSelectedRooms,
-                price: pricePerNight * newSelectedRooms * numberOfNights,
+                unitPrice: pricePerNight,
+                totalPrice: pricePerNight * newSelectedRooms * numberOfNights,
                 roomType: props?.title ?? ""
             }])
         }
@@ -291,6 +293,7 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
                 <div className='flex gap-3 my-3'>
                     {capacityArray.map((icon, i) => (
                         <Image
+                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                             key={i}
                             className="w-5"
                             src={capacityIcon}

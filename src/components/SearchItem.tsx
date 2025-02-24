@@ -4,8 +4,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 function SearchItem({ id, title, propertyType, rooms, from, to }: PropertiesData & { from: string; to: string }) {
     const lowestPrice = Math.min(...rooms.map(room => room.price));
-    console.log("SearchItem from: ", from)
-    console.log("SearchItem to: ", to)
     return (
         <div className='searchItem border-[1px] border-solid border-gray-300 p-3 rounded flex justify-between gap-5 mb-5'>
             <Image

@@ -10,14 +10,15 @@ export interface SearchParams {
     propertyName: string;
 }
 
-async function CheckoutPage({ params }: { params: Promise<SearchParams> }) {
-    const resolvedParams: SearchParams = await params;
+async function CheckoutPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+    const resolvedParams: SearchParams = await searchParams;
 
     if (!resolvedParams) {
         return <div>No search parameters provided</div>;
     }
 
     const { selectedRooms, from, to, numberOfNights, propertyName } = resolvedParams;
+    console.log("selectedRooms: ", selectedRooms)
 
     let parsedRooms: selectedRoomsData[] = [];
     try {
@@ -27,13 +28,16 @@ async function CheckoutPage({ params }: { params: Promise<SearchParams> }) {
         return <div>Invalid rooms data. Please make sure the data is correct.</div>;
     }
 
+    // Filter out rooms with quantity 0
+    const filteredRooms = parsedRooms.filter(room => room.quantity > 0);
+
     const fromDate = from;
     const toDate = to;
     const numNights = numberOfNights;
 
     // Calculate the total price from the selected rooms
-    const totalPrice = parsedRooms.reduce((sum: number, room: selectedRoomsData) => {
-        return sum + room.price * room.quantity;
+    const totalPrice = filteredRooms.reduce((sum: number, room: selectedRoomsData) => {
+        return sum + room.unitPrice * room.quantity;
     }, 0);
 
     // Assuming the hotel name is either in the `selectedRooms` or passed from elsewhere
@@ -48,7 +52,7 @@ async function CheckoutPage({ params }: { params: Promise<SearchParams> }) {
                 <div className="mb-8">
                     <h2 className="text-xl font-semibold mb-4 text-gray-700">Booking Summary</h2>
                     <BookingSummary
-                        selectedRooms={parsedRooms}
+                        selectedRooms={filteredRooms}
                         totalPrice={totalPrice}
                         numberOfNights={numNights}
                         from={fromDate}
@@ -75,13 +79,3 @@ async function CheckoutPage({ params }: { params: Promise<SearchParams> }) {
 }
 
 export default CheckoutPage;
-
-// import React from 'react'
-
-// function CheckoutPage() {
-//     return (
-//         <div>CheckoutPage</div>
-//     )
-// }
-
-// export default CheckoutPage

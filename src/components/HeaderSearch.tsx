@@ -29,7 +29,7 @@ function HeaderSearchContent() {
 
     const [date, setDate] = useState<DateRange | undefined>({
         from: new Date(),
-        to: addDays(new Date(), 10),
+        to: addDays(new Date(), 5),
     })
 
     const [destination, setDestination] = useState<string>("")

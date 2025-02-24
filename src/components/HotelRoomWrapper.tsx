@@ -11,7 +11,8 @@ export interface selectedRoomsData {
     title: string,
     description: string,
     quantity: number,
-    price: number,
+    unitPrice: number,
+    totalPrice: number,
     roomType: string
 }
 
@@ -23,19 +24,19 @@ export default function HotelRoomWrapper({ propertyName, propertyRooms, from, to
 }) {
     const [selectedRoomsData, setSelectedRoomsData] = useState<selectedRoomsData[]>([]) // Holds all selected rooms and their details
 
-    console.log("selectedRoomsData", selectedRoomsData)
+    console.log("selectedRoomsData: ", selectedRoomsData)
 
     const numberOfNights = Number((new Date(to).getTime() - new Date(from).getTime()) / (1000 * 3600 * 24)) // Calculate number of nights
-    console.log("HotelRoomWrapper numberOfNights: ", numberOfNights)
 
-    const totalPrice = selectedRoomsData.reduce((total, room) => total + room.price, 0)
+    const totalPrice = selectedRoomsData.reduce((total, room) => total + room.totalPrice, 0)
     const totalRooms = selectedRoomsData.reduce((total, room) => total + room.quantity, 0)
+    const filteredRooms = selectedRoomsData.filter(room => room.quantity > 0);
 
     const router = useRouter();
 
     const handleProceedToPayment = () => {
         // Convert selected rooms into a query string to pass to the checkout page
-        const selectedRoomsQuery = JSON.stringify(selectedRoomsData);
+        const selectedRoomsQuery = JSON.stringify(filteredRooms);
         const fromQuery = encodeURIComponent(from);
         const toQuery = encodeURIComponent(to);
         const numberOfNightsQuery = numberOfNights;

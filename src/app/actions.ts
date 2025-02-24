@@ -205,11 +205,13 @@ export async function createBooking(prevState: BookingState, formData: FormData)
 }
 
 // Server Action to fetch bookings
-export async function getBookings(): Promise<(Booking & { roomsBooked: Room[] })[]> {
+export async function getBookings(): Promise<(Booking & { roomsBooked: Room[] })[] | null> {
     const session = await getServerSession(authOptions);
+    console.log("action session: ",session)
 
     if (!session?.user?._id) {
-        throw new Error('Unauthorized - Please login first');
+        // throw new Error('Unauthorized - Please login first');
+        return null;
     }
 
     const userId = session.user._id;
