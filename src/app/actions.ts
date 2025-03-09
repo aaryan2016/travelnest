@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { db } from "@/server/db";
@@ -224,4 +225,78 @@ export async function getBookings(): Promise<(Booking & { roomsBooked: Room[] })
     });
 
     return bookings;
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export async function createOrUpdateProperty(data: any, editingPropertyId?: string) {
+    if (editingPropertyId) {
+        // Update an existing property
+        return db.property.update({
+            where: { id: editingPropertyId },
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            data: data,
+        })
+    }
+    // Create a new property
+    return db.property.create({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        data: data,
+    })
+}
+
+export async function fetchAllProperties(page: number, limit: number) {
+    const skip = (page - 1)*limit;
+    const properties = await db.property.findMany({
+        skip,
+        take: limit
+    })
+    const count = await db.property.count()
+
+    return {
+        properties,
+        count,
+    }
+}
+
+export async function deleteProperty(propertyId: string) {
+  try {
+    // First, delete the associated rooms, amenities, and bookings related to the property
+    await db.room.deleteMany({
+      where: {
+        propertyId: propertyId,
+      },
+    })
+
+    await db.booking.deleteMany({
+      where: {
+        roomsBooked: {
+          some: {
+            propertyId: propertyId,
+          },
+        },
+      },
+    })
+
+    // Now, disconnect the property from its associated amenities
+    await db.property.update({
+      where: { id: propertyId },
+      data: {
+        ameneties: {
+          disconnect: [{ id: propertyId }], // Disconnect the property from the amenity
+        },
+      },
+    })
+
+    // Now, delete the property itself
+    await db.property.delete({
+      where: {
+        id: propertyId,
+      },
+    })
+
+    console.log(`Property with id ${propertyId} has been deleted.`)
+  } catch (error) {
+    console.error('Error deleting property:', error)
+    throw new Error('Error deleting property')
+  }
 }
