@@ -1,6 +1,7 @@
 import PaymentForm from '@/components/PaymentForm';
 import BookingSummary from '@/components/BookingSummary';
 import type { selectedRoomsData } from '@/components/HotelRoomWrapper';
+import DownloadReceiptButton from '@/components/DownloadReceiptButton'
 
 export interface SearchParams {
     selectedRooms: string;
@@ -73,6 +74,14 @@ async function CheckoutPage({ searchParams }: { searchParams: Promise<SearchPara
                         to={toDate}
                     />
                 </div>
+                <DownloadReceiptButton
+                    selectedRooms={filteredRooms}
+                    totalPrice={totalPrice}
+                    numberOfNights={numNights}
+                    from={fromDate}
+                    to={toDate}
+                    propertyName={propertyName}
+                />
             </div>
         </div>
     );
