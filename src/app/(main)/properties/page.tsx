@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { createOrUpdateProperty, deleteProperty, fetchAllProperties } from '@/app/actions'
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { useSession } from 'next-auth/react'
 
 const PAGE_SIZE = 5 // Number of properties per page
 
@@ -26,13 +27,22 @@ export default function PropertyPage() {
     // Fetch all properties from the database
     useEffect(() => {
         const fetchData = async () => {
-            const { properties: data, count } = await fetchAllProperties(currentPage, PAGE_SIZE)
+            const { properties: data, count } = await fetchAllProperties(currentPage, PAGE_SIZE, searchQuery)
             setProperties(data)
             setTotalCount(count)
         }
 
         void fetchData()
-    }, [currentPage])
+    }, [currentPage, searchQuery])
+
+    //Handle Admin access
+    const { data: session, status } = useSession()
+
+    if (status === 'loading') return <div>Loading...</div>
+
+    if (!session || session.user.role !== 'ADMIN') {
+        return <div className="text-red-500 p-6 text-center">Access Denied: Admins Only</div>
+    }
 
     // Handle search query change
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +75,7 @@ export default function PropertyPage() {
             await deleteProperty(propertyToDelete.id)
 
             // After deletion, fetch the properties again
-            const { properties: newProperties, count } = await fetchAllProperties(currentPage, PAGE_SIZE);
+            const { properties: newProperties, count } = await fetchAllProperties(currentPage, PAGE_SIZE, searchQuery);
             setProperties(newProperties); // Set the updated properties
             setTotalCount(count); // Update count for pagination
 

@@ -34,6 +34,14 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(actualCallbackUrl, request.url))
     }
 
+    // 🚫 Admin-only route
+    if (token && url.pathname.startsWith('/properties')) {
+        if (token.role !== 'ADMIN') {
+            // return NextResponse.redirect(new URL('/', request.url))
+            return NextResponse.redirect(new URL('/unauthorized', request.url))
+        }
+    }
+
     // return NextResponse.redirect(new URL('/sign-in', request.url))
     return NextResponse.next()
 }
@@ -45,6 +53,7 @@ export const config = {
         '/',
         '/hotels/:path*',
         '/checkout',
-        '/my-booking'
+        '/my-booking',
+        '/properties/:path*'
     ],
 }

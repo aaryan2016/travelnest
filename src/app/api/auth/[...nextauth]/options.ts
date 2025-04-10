@@ -11,6 +11,7 @@ interface CustomSession {
         username: string;
         email?: string | null;
         name?: string | null;
+        role: string;
     };
     // user: User;
     expires: string;
@@ -74,10 +75,14 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }: { token: JWT; user?: User }) {
             if (user) {
+                // Add role from DB if user was just authenticated
+                const dbUser = await db.user.findUnique({ where: { id: user.id } });
+
                 return {
                     ...token,
                     _id: user._id,
-                    username: user.username
+                    username: user.username,
+                    role: dbUser?.role ?? 'GUEST',
                 };
             }
             return token;
@@ -92,6 +97,7 @@ export const authOptions: NextAuthOptions = {
                     _id: token._id!,
                     // biome-ignore lint/style/noNonNullAssertion: <explanation>
                     username: token.username!,
+                    role: token.role as string,
                 }
             };
         }

@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 import type { propertyData } from "./(main)/hotels/[hotelId]/page";
 import type { PropertiesData } from "./(main)/hotels/page";
 import type { BookingState } from "@/components/PaymentForm";
-import { type Booking, BookingStatus, PaymentStatus, type Room } from "@prisma/client"; // Enum imports
+import { type Booking, BookingStatus, PaymentStatus, Prisma, type Room } from "@prisma/client"; // Enum imports
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/options";
 
@@ -208,7 +208,7 @@ export async function createBooking(prevState: BookingState, formData: FormData)
 // Server Action to fetch bookings
 export async function getBookings(): Promise<(Booking & { roomsBooked: Room[] })[] | null> {
     const session = await getServerSession(authOptions);
-    console.log("action session: ",session)
+    console.log("action session: ", session)
 
     if (!session?.user?._id) {
         // throw new Error('Unauthorized - Please login first');
@@ -244,13 +244,33 @@ export async function createOrUpdateProperty(data: any, editingPropertyId?: stri
     })
 }
 
-export async function fetchAllProperties(page: number, limit: number) {
-    const skip = (page - 1)*limit;
+export async function fetchAllProperties(page: number, limit: number, searchQuery = '') {
+    const skip = (page - 1) * limit;
+    const whereClause = searchQuery
+        ? {
+            OR: [
+                {
+                    title: {
+                        contains: searchQuery,
+                        mode: Prisma.QueryMode.insensitive, // Corrected mode
+                    },
+                },
+                {
+                    city: {
+                        contains: searchQuery,
+                        mode: Prisma.QueryMode.insensitive, // Corrected mode
+                    },
+                },
+            ],
+        }
+        : {}
+
     const properties = await db.property.findMany({
+        where: whereClause,
         skip,
         take: limit
     })
-    const count = await db.property.count()
+    const count = await db.property.count({ where: whereClause })
 
     return {
         properties,
@@ -259,44 +279,44 @@ export async function fetchAllProperties(page: number, limit: number) {
 }
 
 export async function deleteProperty(propertyId: string) {
-  try {
-    // First, delete the associated rooms, amenities, and bookings related to the property
-    await db.room.deleteMany({
-      where: {
-        propertyId: propertyId,
-      },
-    })
+    try {
+        // First, delete the associated rooms, amenities, and bookings related to the property
+        await db.room.deleteMany({
+            where: {
+                propertyId: propertyId,
+            },
+        })
 
-    await db.booking.deleteMany({
-      where: {
-        roomsBooked: {
-          some: {
-            propertyId: propertyId,
-          },
-        },
-      },
-    })
+        await db.booking.deleteMany({
+            where: {
+                roomsBooked: {
+                    some: {
+                        propertyId: propertyId,
+                    },
+                },
+            },
+        })
 
-    // Now, disconnect the property from its associated amenities
-    await db.property.update({
-      where: { id: propertyId },
-      data: {
-        ameneties: {
-          disconnect: [{ id: propertyId }], // Disconnect the property from the amenity
-        },
-      },
-    })
+        // Now, disconnect the property from its associated amenities
+        await db.property.update({
+            where: { id: propertyId },
+            data: {
+                ameneties: {
+                    disconnect: [{ id: propertyId }], // Disconnect the property from the amenity
+                },
+            },
+        })
 
-    // Now, delete the property itself
-    await db.property.delete({
-      where: {
-        id: propertyId,
-      },
-    })
+        // Now, delete the property itself
+        await db.property.delete({
+            where: {
+                id: propertyId,
+            },
+        })
 
-    console.log(`Property with id ${propertyId} has been deleted.`)
-  } catch (error) {
-    console.error('Error deleting property:', error)
-    throw new Error('Error deleting property')
-  }
+        console.log(`Property with id ${propertyId} has been deleted.`)
+    } catch (error) {
+        console.error('Error deleting property:', error)
+        throw new Error('Error deleting property')
+    }
 }
