@@ -73,13 +73,14 @@ function HeaderSearchContent() {
     }
 
     return (
-        <div className="headerSearch flex items-center justify-around max-w-screen-lg bg-white border-4 border-yellow-500 py-3 px-3 gap-3 rounded">
-            <div className="headerSearchItem flex items-center gap-[10px]">
+        <div className="headerSearch flex flex-col sm:flex-row items-center justify-around max-w-screen bg-white border-4 border-yellow-500 py-3 px-3 gap-4 rounded md:flex-wrap lg:flex-nowrap">
+            {/* Destination Input */}
+            <div className="headerSearchItem flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <FontAwesomeIcon icon={faBed} className='headerIcon text-slate-300 h-5' />
                 <input
                     type='text'
                     placeholder='Where are you going?'
-                    className='headerSearchInput border-none outline-none '
+                    className='headerSearchInput border-none outline-none w-full sm:w-auto'
                     onChange={(e) => { setDestination(e.target.value) }}
                 />
             </div>
@@ -87,28 +88,41 @@ function HeaderSearchContent() {
                     <FontAwesomeIcon icon={faCalendarDays} className='headerIcon text-slate-300 h-5' />
                     <span className='headerSearchText text-slate-300 cursor-pointer'>date to date</span>
                 </div> */}
-            <DatePickerWithRange date={date} setDate={setDate} className='text-slate-300' />
 
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <div className='flex items-center gap-[10px] border-none outline-none'>
-                        <FontAwesomeIcon icon={faPerson} className='headerIcon text-slate-300 h-5' />
-                        <span className='headerSearchText text-slate-300 cursor-pointer'>{`${options.adult} adults ${options.kids} childern ${options.rooms} rooms`}</span>
-                        <DropdownMenuContent className="w-56">
-                            <PersonDropdownMenu options={options} handleOptions={handleOptions} />
-                        </DropdownMenuContent>
-                    </div>
-                </DropdownMenuTrigger>
-            </DropdownMenu>
+            {/* Date Picker */}
+            <div className='headerSearchItem'>
+                <DatePickerWithRange date={date} setDate={setDate} className='w-full sm:w-auto text-slate-300' />
+            </div>
+
+            {/* Person Dropdown */}
+            <div className='headerSearchItem'>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <div className='flex  items-center gap-2 border-none outline-none sm:gap-3 w-full sm:w-auto'>
+                            <FontAwesomeIcon icon={faPerson} className='headerIcon text-slate-300 h-5' />
+                            <span className='headerSearchText flex flex-row sm:flex-col lg:flex-row gap-1 lg:gap-4 text-slate-300 cursor-pointer w-full lg:w-auto'>
+                                <p className='min-w-[90px] whitespace-nowrap'>{`${options.adult} adults`}</p>
+                                <p className='min-w-[90px] whitespace-nowrap'>{`${options.kids} children`}</p>
+                                <p className='min-w-[90px] whitespace-nowrap'>{`${options.rooms} rooms`}</p>
+                            </span>
+                            {/* <span className='headerSearchText text-slate-300 cursor-pointer text-wrap w-full sm:w-auto'>{`${options.adult} adults ${options.kids} childern ${options.rooms} rooms`}</span> */}
+                            <DropdownMenuContent className="w-56">
+                                <PersonDropdownMenu options={options} handleOptions={handleOptions} />
+                            </DropdownMenuContent>
+                        </div>
+                    </DropdownMenuTrigger>
+                </DropdownMenu>
+            </div>
             {/* <div className="headerSearchItem flex items-center gap-[10px]">
                 <FontAwesomeIcon icon={faPerson} className='headerIcon text-slate-300 h-5' />
                 <span className='headerSearchText text-slate-300 cursor-pointer'>{`${options.adult} adults ${options.kids} childern ${options.rooms} rooms`}</span>
                 <PersonDropdownMenu options={options} />
             </div> */}
-            <div className="headerSearchItem flex items-center gap-3">
+            <div className="headerSearchItem flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <Button
                     onClick={handleSearch}
                     disabled={destination === ""}
+                    className="w-full sm:w-auto"
                 >Search</Button>
             </div>
         </div>

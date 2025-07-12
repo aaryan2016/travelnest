@@ -11,11 +11,11 @@ export default function HomePage() {
     <div>
       {/* <Navbar /> */}
       <HeroSection />
-      <div className="homeContainer mt-12 flex flex-col items-center gap-8">
+      <div className="homeContainer mt-12 flex flex-col items-center gap-8 px-4 sm:px-8 lg:px-16">
         <Featured />
-        <h1 className="homeTitle text-2xl w-[1024]">Browse by Property Type</h1>
+        <h1 className="homeTitle text-2xl sm:text-3xl lg:text-4xl w-full text-center font-bold mt-8">Browse by Property Type</h1>
         <PropertyList />
-        <h1 className="homeTitle text-2xl w-[1024]">Homes Guests Love</h1>
+        <h1 className="homeTitle text-2xl m:text-3xl lg:text-4xl w-full text-center font-bold mt-8">Homes Guests Love</h1>
         <FeaturedProperties />
         <MailList />
         <Footer />

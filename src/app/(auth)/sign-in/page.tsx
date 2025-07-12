@@ -175,7 +175,7 @@ export default function SignInPage() {
             {/* <Suspense fallback={<div>Loading...</div>}>
                 <SearchParamsHandler onParamsReady={setParams} />
             </Suspense> */}
-            <Card className="w-full max-w-md shadow-lg rounded-xl bg-white border border-gray-200">
+            <Card className="w-full max-w-lg sm:max-w-md lg:max-w-sm xl:max-w-md shadow-lg rounded-xl bg-white border border-gray-200">
                 <CardHeader className="bg-blue-600 text-white p-4 rounded-t-xl">
                     <CardTitle className="text-center text-2xl font-bold">Sign in to your account</CardTitle>
                 </CardHeader>

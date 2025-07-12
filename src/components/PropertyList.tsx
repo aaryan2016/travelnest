@@ -36,13 +36,13 @@ function PropertyList() {
     ]
     return (
         <>
-            <div className='pList w-full max-w-screen-lg flex justify-between gap-5'>
+            <div className='pList w-full max-w-screen-lg mx-auto mt-12 sm:flex sm:flex-wrap sm:justify-between sm:gap-5'>
                 {properties.map(property => (
-                    <div key={property.propertyType} className="pListItem flex-1 rounded-xl overflow-hidden cursor-pointer">
+                    <div key={property.propertyType} className="pListItem mb-5 flex-1 rounded-xl overflow-hidden cursor-pointer">
                         <Image
                             className='pListImg w-full h-40 object-cover'
                             src={property.img}
-                            alt=""
+                            alt={`${property.propertyType} image`}
                             width={100}
                             height={100}
                         />
