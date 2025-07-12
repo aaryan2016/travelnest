@@ -285,12 +285,12 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
     }
 
     return (
-        <div className='hotelRoomItem border-[1px] border-solid border-gray-300 p-3 rounded flex gap-3 mb-5 justify-between'>
-            <div className="flex flex-1 flex-col m-2">
+        <div className='hotelRoomItem border border-gray-300 p-4 rounded flex flex-col lg:flex-row gap-6 mb-6'>
+            <div className="flex flex-col gap-3 flex-1">
                 <h1 className="hrTitle text-lg font-extrabold text-blue-800">{props?.title}</h1>
-                <div className='hrDesc text-sm mt-3'>{props?.description}</div>
+                <div className='hrDesc text-sm'>{props?.description}</div>
                 <div className="text-base font-medium mt-6">Number of Guests</div>
-                <div className='flex gap-3 my-3'>
+                <div className='flex gap-2 '>
                     {capacityArray.map((icon, i) => (
                         <Image
                             // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -303,19 +303,23 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
                         />
                     ))}
                 </div>
-                <div className='mt-2'>Available Rooms: {maxRooms}</div>
+                <div className=''>Available Rooms: {maxRooms}</div>
             </div>
-            <div className='p-1 m-2'>
-                <ul className='flex flex-col justify-center'>
+
+            {/* Amenities Column */}
+            <div className='flex-1'>
+                <ul className='flex flex-col justify-start'>
                     {props?.amenities.map(amenity => (
-                        <div key={amenity.id} className='mb-1 flex gap-3 items-center'>
+                        <div key={amenity.id} className='mb-2 flex gap-2 items-center'>
                             <FontAwesomeIcon className='h-3' icon={faCheck} />
                             <li className='text-sm mb-3 pt-2'>{amenity.name}</li>
                         </div>
                     ))}
                 </ul>
             </div>
-            <div className='price w-72 flex-1 flex justify-center'>
+
+            {/* Price & Booking Column */}
+            {/* <div className='price w-full lg:w-72 flex justify-center'>
                 <div className='flex flex-col items-center my-3'>
                     <div className='flex'>
                         <div className='font-semibold text-lg'>Price per Night: $</div>
@@ -328,7 +332,7 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
                     </div>
                     <div className='mt-4'>
                         {showRoomControls ? (
-                            <div className="flex gap-3">
+                            <div className="flex gap-3 mt-3">
                                 <Button onClick={handleDecrease} disabled={selectedRooms <= 0}>-</Button>
                                 <span>{selectedRooms}</span>
                                 <Button onClick={handleIncrease} disabled={selectedRooms >= maxRooms}>+</Button>
@@ -337,6 +341,30 @@ function HotelRoom({ props, numberOfNights, selectedRoomsData, setSelectedRoomsD
                             <Button onClick={handleAddToSelection}>Add to Selection</Button>
                         )}
                     </div>
+                </div>
+            </div> */}
+            <div className="flex flex-col items-start lg:items-center flex-1">
+                <div className="flex items-center mb-2">
+                    <span className="font-semibold text-lg">Price per Night: $</span>
+                    <span className="text-xl font-bold ml-2">{pricePerNight}</span>
+                </div>
+
+                <ul className="text-green-600 text-sm mt-2 space-y-1">
+                    <li><b>Free cancellation</b> anytime</li>
+                    <li><b>No prepayment needed</b> – pay at the property</li>
+                    <li><b>No credit card needed</b></li>
+                </ul>
+
+                <div className="mt-4 w-full flex justify-center">
+                    {showRoomControls ? (
+                        <div className="flex gap-3 items-center">
+                            <Button onClick={handleDecrease} disabled={selectedRooms <= 0}>-</Button>
+                            <span>{selectedRooms}</span>
+                            <Button onClick={handleIncrease} disabled={selectedRooms >= maxRooms}>+</Button>
+                        </div>
+                    ) : (
+                        <Button onClick={handleAddToSelection}>Add to Selection</Button>
+                    )}
                 </div>
             </div>
         </div>

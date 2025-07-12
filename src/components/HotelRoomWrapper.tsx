@@ -57,7 +57,7 @@ export default function HotelRoomWrapper({ propertyName, propertyRooms, from, to
                 />
             ))}
             {/* Total price for all selected rooms */}
-            <div className='flex items-center justify-between'>
+            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4 p-4 border rounded-md bg-slate-50'>
                 <div className='flex'>
                     <div className='font-semibold text-lg'>Price for {numberOfNights} Nights: $ </div>
                     <div className='flex text-xl font-bold'>{totalPrice}</div>
@@ -66,7 +66,7 @@ export default function HotelRoomWrapper({ propertyName, propertyRooms, from, to
                     <div className='font-semibold text-lg'>Total Rooms: </div>
                     <div className='flex text-xl font-bold'>{totalRooms}</div>
                 </div>
-                <div className='mx-10'>
+                <div className='self-start sm:self-auto'>
                     <Button
                         onClick={handleProceedToPayment}
                         disabled={totalRooms <= 0}>Proceed for Payment</Button>

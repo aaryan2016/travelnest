@@ -82,8 +82,8 @@ export default async function page({ params, searchParams }: { params: Promise<H
         return (
             <div>
                 {/* <Navbar /> */}
-                <div className="hotelContainer flex flex-col items-center mt-5">
-                    <div className="hotelWrapper w-full max-w-screen-lg flex flex-col gap-3 relative">
+                <div className="hotelContainer flex flex-col items-center mt-5 mx-auto px-2">
+                    <div className="hotelWrapper w-full max-w-screen-lg px-4 sm:px-6 flex flex-col gap-3 relative">
                         <Button className='bookNow absolute top-3 right-0'>Reserve or Book Now!</Button>
                         <h1 className="hotelTitle font-bold text-2xl">{propertyData?.title}</h1>
                         <div className="hotelAddress text-xs flex items-center gap-3">
@@ -96,9 +96,9 @@ export default async function page({ params, searchParams }: { params: Promise<H
                         <span className="hotelPriceHighlight text-[#008009] font-medium">
                             Book a stay over $114 at this property and get a free airport taxi
                         </span>
-                        <div className="hotelImages flex flex-wrap justify-between">
+                        <div className="hotelImages grid grid-cols-2 lg:grid-cols-3 gap-2">
                             {photos.map((photo) => (
-                                <div className="hotelImgWrapper w-1/3 p-1" key={photo.id}>
+                                <div className="hotelImgWrapper w-full" key={photo.id}>
                                     <Image
                                         src={photo.src}
                                         alt=""
@@ -109,8 +109,8 @@ export default async function page({ params, searchParams }: { params: Promise<H
                                 </div>
                             ))}
                         </div>
-                        <div className="hotelDetails flex justify-between gap-5 mt-5">
-                            <div className="hotelDetailsText flex-[3_3_0%]">
+                        <div className="hotelDetails flex flex-col lg:flex-row gap-5 mt-5">
+                            <div className="hotelDetailsText flex-[3_3_0%] w-full">
                                 <h1 className='hotelTitle font-bold text-2xl'>Stay in the heart of {propertyData?.city}</h1>
                                 <p className="hotelDesc text-sm mt-5">
                                     {propertyData?.description}
@@ -118,7 +118,7 @@ export default async function page({ params, searchParams }: { params: Promise<H
                                     Ipsam, praesentium ut. Repellat illum doloremque voluptatibus sapiente dolores accusamus possimus, inventore ducimus quidem debitis maxime quasi eius dolore ratione tenetur molestias, obcaecati optio sunt incidunt dicta. Laborum, asperiores suscipit?
                                 </p>
                             </div>
-                            <div className="hotelDetailsPrice flex-1 bg-blue-100 p-5 flex flex-col gap-5 rounded">
+                            <div className="hotelDetailsPrice w-full lg:max-w-sm bg-blue-100 p-5 flex flex-col gap-5 rounded">
                                 <h1 className='font-bold text-lg text-[#555]'>Perfect for a 9-night stay!</h1>
                                 <span className='text-sm'>
                                     Located in the real heart of {propertyData?.city}, this property has an excellent location score of 9.8!
@@ -131,7 +131,7 @@ export default async function page({ params, searchParams }: { params: Promise<H
                         </div>
                         <div className='facilities mt-3'>
                             <h1 className="facilityTitle font-bold text-lg">Most popular facilities</h1>
-                            <div className="facilityName flex mt-6">
+                            <div className="facilityName flex flex-wrap mt-6 gap-x-6 gap-y-3 md:justify-center">
                                 {propertyAmenities?.map(amenity => (
                                     <div key={amenity.id} className='flex font-semibold items-center mr-9'>
                                         {amenity.icon && (
