@@ -38,6 +38,14 @@ export default async function Page({
 
     const { destination, from, to, adult, kids, rooms } = resolvedSearchParams;
 
+    if (!destination) {
+        return (
+            <div className="text-center py-10 text-red-600 font-semibold">
+                Missing destination. Please start a new search.
+            </div>
+        );
+    }
+
     // const numberOfNights = calculateNights(from, to);
     const properties: PropertiesData[] | null = await fetchProperties({ destination });
     console.log("length: ", properties?.length);
@@ -46,17 +54,19 @@ export default async function Page({
     return (
         <div>
             {/* <Navbar /> */}
-            <div className="listContainer flex justify-center mt-5">
-                <div className="listWrapper w-full max-w-screen-lg flex gap-5">
-                    <SearchItemFilter
-                        destination={destination}
-                        from={from}
-                        to={to}
-                        adult={adult}
-                        kids={kids}
-                        rooms={rooms}
-                    />
-                    <div className="listResult flex-[3_3_0%]">
+            <div className="listContainer flex justify-center mt-5 px-4">
+                <div className="listWrapper w-full max-w-screen-lg flex flex-col lg:flex-row gap-5">
+                    <div className="flex-[1_1_0%] w-full lg:max-w-[300px]">
+                        <SearchItemFilter
+                            destination={destination}
+                            from={from}
+                            to={to}
+                            adult={adult}
+                            kids={kids}
+                            rooms={rooms}
+                        />
+                    </div>
+                    <div className="listResult flex-[3_3_0%] w-full">
                         {properties?.length ? (
                             properties.map((property) => (
                                 <SearchItem
@@ -70,7 +80,9 @@ export default async function Page({
                                 />
                             ))
                         ) : (
-                            <p>No properties found for the location: {destination}</p>
+                            <p className="text-gray-600 text-lg mt-10">
+                                No properties found in <span className="font-semibold">{destination}</span>. Try adjusting your filters or choosing a different location.
+                            </p>
                         )}
                     </div>
                 </div>
