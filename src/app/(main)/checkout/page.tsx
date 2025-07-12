@@ -11,14 +11,13 @@ export interface SearchParams {
     propertyName: string;
 }
 
-async function CheckoutPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
-    const resolvedParams: SearchParams = await searchParams;
+async function CheckoutPage({ searchParams }: { searchParams: SearchParams }) {
 
-    if (!resolvedParams) {
+    if (!searchParams) {
         return <div>No search parameters provided</div>;
     }
 
-    const { selectedRooms, from, to, numberOfNights, propertyName } = resolvedParams;
+    const { selectedRooms, from, to, numberOfNights, propertyName } = searchParams;
     console.log("selectedRooms: ", selectedRooms)
 
     let parsedRooms: selectedRoomsData[] = [];
