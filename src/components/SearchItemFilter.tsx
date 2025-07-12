@@ -64,14 +64,14 @@ function FilterContent({ destination, from, to, adult, kids, rooms }: SearchPara
     }
 
     return (
-        <div className="listSearch flex-1 p-3 rounded-xl sticky h-max top-3 bg-[#febb02]">
+        <div className="listSearch p-3 rounded-xl sticky h-max top-3 bg-[#febb02]">
             <h1 className="lsTitle text-xl text-gray-700 font-bold mb-3">Search</h1>
             <div className="listItem flex flex-col gap-1 mb-2">
                 <label
                     className="text-sm"
                     htmlFor="">Destination</label>
                 <input
-                    className="h-8 border-none p-1 mb-2"
+                    className="h-9 border-none py-2 px-4 mb-2 rounded-md"
                     placeholder={destination}
                     type="text"
                     onChange={(e) => { setFilterDestination(e.target.value) }} />
@@ -81,7 +81,10 @@ function FilterContent({ destination, from, to, adult, kids, rooms }: SearchPara
                 {/* <span
                     className="h-8 p-1 bg-white mb-2 flex items-center cursor-pointer"
                 >{`${format(from, "dd-MMM-yyyy")} to ${format(to, "dd-MMM-yyyy")}`}</span> */}
-                <DatePickerWithRange date={filterDate} setDate={setFilterDate} className='text-slate-300' />
+
+                <div className='h-8 mb-2 broder-4 border-black'>
+                    <DatePickerWithRange date={filterDate} setDate={setFilterDate} className='text-slate-300' />
+                </div>
 
                 <div className="lsItem flex flex-col gap-1 mb-2">
                     <label

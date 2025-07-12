@@ -9,7 +9,7 @@ function Navbar() {
 
     return (
         <div className='navbar flex h-14 bg-blue-900 justify-center'>
-            <div className='navcontainer flex w-full max-w-screen-lg justify-between px-4 text-white items-center '>
+            <div className='navcontainer flex w-full max-w-screen-lg justify-between px-4 text-white items-center'>
 
                 {/* logo */}
                 <span

@@ -18,7 +18,7 @@ export default function HomePage() {
         <h1 className="homeTitle text-2xl m:text-3xl lg:text-4xl w-full text-center font-bold mt-8">Homes Guests Love</h1>
         <FeaturedProperties />
         <MailList />
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   );

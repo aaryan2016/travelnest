@@ -164,7 +164,7 @@ export default async function page({ params, searchParams }: { params: Promise<H
                         <HotelRoomWrapper propertyName={propertyData?.title} propertyRooms={propertyRooms} from={from} to={to} /> {/* Example dates */}
                     </div>
                     <MailList />
-                    <Footer />
+                    {/* <Footer /> */}
                 </div>
             </div >
         )
