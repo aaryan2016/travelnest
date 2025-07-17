@@ -6,7 +6,7 @@
 
 ## 🚀 Live Demo
 
-👉 [https://travelnest.vercel.app](https://travelnest.vercel.app)
+👉  [travelnest-one.vercel.app](travelnest-one.vercel.app)
 
 ---
 
