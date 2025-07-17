@@ -1,29 +1,101 @@
-# Create T3 App
+# TravelNest 🧳
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+[![Vercel](https://img.shields.io/badge/deployed%20on-vercel-000000?style=flat&logo=vercel&logoColor=white)](https://travelnest-one.vercel.app/)
 
-## What's next? How do I make an app with this?
+**TravelNest** is a full-stack hotel booking web application inspired by platforms like Booking.com. It allows users to browse hotel listings, filter by location and category, register/login securely, and manage bookings — all built with modern web technologies like Next.js 14, App Router, and PostgreSQL (NeonDB).
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## 🚀 Live Demo
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+👉 [https://travelnest.vercel.app](https://travelnest.vercel.app)
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+---
 
-## Learn More
+## 🧩 Features
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- 🔐 **Authentication & Authorization** (NextAuth.js with GitHub and Email providers)
+- 🏨 **Hotel Listings** with filtering by location and category
+- 📅 **Booking System** with availability management
+- 🧾 **User Dashboard** to view bookings and hosted listings
+- 🌍 **Dynamic Routing** with SEO-friendly URLs
+- ⚙️ **Server Actions & Server Components** using Next.js App Router
+- 📬 **Form Validation** with Zod for type-safe inputs
+- 🌈 **Responsive UI** built with Tailwind CSS
+- 🚀 **Deployed on Vercel** with PostgreSQL hosted on NeonDB
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### 🛡️ Admin Functionality (`/properties`)
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- 🔐 Protected route accessible only to admin users
+- ➕ Create, ✏️ Edit, and ❌ Delete hotel property listings
+- 🔎 **Search functionality** to filter properties by title
+- 📄 **Pagination** for scalable management of large property datasets
 
-## How do I deploy this?
+---
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## 🛠 Tech Stack
+
+- **Frontend:** Next.js 14 (App Router), React, TypeScript, Tailwind CSS
+- **Backend:** Next.js Server Actions, NextAuth.js, Prisma ORM
+- **Database:** PostgreSQL (NeonDB), Prisma ORM
+- **Validation:** Zod
+- **Auth:** NextAuth.js
+- **Deployment:** Vercel
+
+---
+
+## 📁 Folder Structure
+
+- `/app` → Pages, layouts, routes (App Router)
+- `/components` → Reusable UI components
+- `/libs` → Prisma client, utility functions
+- `/actions` → Server-side logic for booking, listings, etc.
+- `/prisma` – Prisma schema and migrations
+- `/public` → Static assets (images, icons)
+- `/styles` → Tailwind and global styles
+
+
+---
+## 🧰 Getting Started
+
+### Prerequisites
+
+- Node.js (v18+)
+- PostgreSQL database (NeonDB or local)
+- Vercel (for deployment) – optional
+
+### Installation
+
+1. **Clone the repo**
+    ```bash
+    git clone https://github.com/aaryan2016/travelnest.git
+    cd travelnest
+
+2. **Install dependencies**
+    ``` bash
+    npm install
+    # or
+    yarn install
+
+3. **Set up environment variables**
+
+    Create a `.env` file in the root directory:
+
+    ```ini
+    DATABASE_URL=your_postgres_connection_string
+    NEXTAUTH_SECRET=your_random_secret_key
+    NEXTAUTH_URL=http://localhost:3000
+
+4. **Push Prisma schema to DB**
+    ```bash
+    npx prisma db push
+
+5. **Run the development server**
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+
+Visit http://localhost:3000 in your browser 🚀
+
+Made with ❤️ by Rahul Vaiwala
+
+
